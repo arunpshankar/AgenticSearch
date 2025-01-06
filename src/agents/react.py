@@ -596,7 +596,7 @@ if __name__ == "__main__":
     query = {
         "text": "Find the current exchange rate for USD to INR, retrieve trivia questions about currency, and show a random dog image to lighten the mood.",
     }
-    max_iterations = 5
+    max_iterations = 10
 
     for iteration_data in run_react_agent(query, max_iterations):
         print(f"Iteration {iteration_data['iteration']}:")

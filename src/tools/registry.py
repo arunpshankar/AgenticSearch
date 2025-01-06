@@ -497,7 +497,7 @@ def get_google_search_results(q: str, location: Optional[str] = None, google_dom
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"q": q, "api_key": get_api_key()}
+    params = {"q": q, "api_key": get_serp_api_key()}
     if location:
         params["location"] = location
     if google_domain:
@@ -535,7 +535,7 @@ def get_google_image_search_results(q: str, tbm: str = "isch", gl: Optional[str]
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"q": q, "tbm": tbm, "api_key": get_api_key()}
+    params = {"q": q, "tbm": tbm, "api_key": get_serp_api_key()}
     if gl:
         params["gl"] = gl
     if hl:
@@ -563,7 +563,7 @@ def get_google_location_specific_search(q: str, location: Optional[str] = None, 
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"q": q, "api_key": get_api_key()}
+    params = {"q": q, "api_key": get_serp_api_key()}
     if location:
         params["location"] = location
     if hl:
@@ -596,7 +596,7 @@ def get_google_news_search(q: str, tbm: str = "nws", hl: Optional[str] = None, g
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"q": q, "tbm": tbm, "api_key": get_api_key()}
+    params = {"q": q, "tbm": tbm, "api_key": get_serp_api_key()}
     if hl:
         params["hl"] = hl
     if gl:
@@ -630,7 +630,7 @@ def get_google_maps_search(q: Optional[str] = None, ll: Optional[str] = None, hl
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_maps", "api_key": get_api_key()}
+    params = {"engine": "google_maps", "api_key": get_serp_api_key()}
     if q:
         params["q"] = q
     if ll:
@@ -664,7 +664,7 @@ def get_google_maps_place(place_id: str, hl: Optional[str] = None, gl: Optional[
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_maps", "place_id": place_id, "api_key": get_api_key()}
+    params = {"engine": "google_maps", "place_id": place_id, "api_key": get_serp_api_key()}
     if hl:
         params["hl"] = hl
     if gl:
@@ -696,7 +696,7 @@ def get_google_jobs_search(q: str, location: Optional[str] = None, hl: Optional[
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_jobs", "q": q, "api_key": get_api_key()}
+    params = {"engine": "google_jobs", "q": q, "api_key": get_serp_api_key()}
     if location:
         params["location"] = location
     if hl:
@@ -733,7 +733,7 @@ def get_google_shopping_search(q: str, location: Optional[str] = None, google_do
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_shopping", "q": q, "api_key": get_api_key()}
+    params = {"engine": "google_shopping", "q": q, "api_key": get_serp_api_key()}
     if location:
         params["location"] = location
     if google_domain:
@@ -763,7 +763,7 @@ def get_walmart_basic_search(query: str, page: Optional[int] = None) -> Dict[str
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "walmart", "query": query, "api_key": get_api_key()}
+    params = {"engine": "walmart", "query": query, "api_key": get_serp_api_key()}
     if page:
         params["page"] = page
     try:
@@ -791,7 +791,7 @@ def get_google_trends_interest_over_time(q: str, date: Optional[str] = None, hl:
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_trends", "q": q, "api_key": get_api_key()}
+    params = {"engine": "google_trends", "q": q, "api_key": get_serp_api_key()}
     if date:
         params["date"] = date
     if hl:
@@ -827,7 +827,7 @@ def get_google_trends_compared_breakdown(q: str, data_type: str = "GEO_MAP", geo
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_trends", "q": q, "data_type": data_type, "api_key": get_api_key()}
+    params = {"engine": "google_trends", "q": q, "data_type": data_type, "api_key": get_serp_api_key()}
     if geo:
         params["geo"] = geo
     if region:
@@ -858,7 +858,7 @@ def get_google_trends_interest_by_region(q: str, data_type: str = "GEO_MAP_0", g
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_trends", "q": q, "data_type": data_type, "api_key": get_api_key()}
+    params = {"engine": "google_trends", "q": q, "data_type": data_type, "api_key": get_serp_api_key()}
     if geo:
         params["geo"] = geo
     if region:
@@ -888,7 +888,7 @@ def get_google_local_basic_search(q: str, location: Optional[str] = None, hl: Op
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_local", "q": q, "api_key": get_api_key()}
+    params = {"engine": "google_local", "q": q, "api_key": get_serp_api_key()}
     if location:
         params["location"] = location
     if hl:
@@ -916,7 +916,7 @@ def get_google_finance_basic_search(q: str, hl: Optional[str] = None) -> Dict[st
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_finance", "q": q, "api_key": get_api_key()}
+    params = {"engine": "google_finance", "q": q, "api_key": get_serp_api_key()}
     if hl:
         params["hl"] = hl
     try:
@@ -940,7 +940,7 @@ def get_google_finance_currency_exchange(q: str, hl: Optional[str] = None) -> Di
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_finance", "q": q, "api_key": get_api_key()}
+    params = {"engine": "google_finance", "q": q, "api_key": get_serp_api_key()}
     if hl:
         params["hl"] = hl
     try:
@@ -966,7 +966,7 @@ def get_google_events_basic_search(q: str, hl: Optional[str] = None, gl: Optiona
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_events", "q": q, "api_key": get_api_key()}
+    params = {"engine": "google_events", "q": q, "api_key": get_serp_api_key()}
     if hl:
         params["hl"] = hl
     if gl:
@@ -995,7 +995,7 @@ def get_google_play_query_search(q: Optional[str] = None, hl: Optional[str] = No
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_play", "api_key": get_api_key()}
+    params = {"engine": "google_play", "api_key": get_serp_api_key()}
     if q:
         params["q"] = q
     if hl:
@@ -1024,7 +1024,7 @@ def get_google_videos_basic_search(q: str, hl: Optional[str] = None, gl: Optiona
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "google_videos", "q": q, "api_key": get_api_key()}
+    params = {"engine": "google_videos", "q": q, "api_key": get_serp_api_key()}
     if hl:
         params["hl"] = hl
     if gl:
@@ -1051,7 +1051,7 @@ def get_youtube_basic_search(q: str, hl: Optional[str] = None, gl: Optional[str]
     :raises requests.HTTPError: If the request fails.
     """
     base_url = "https://serpapi.com/search"
-    params = {"engine": "youtube", "search_query": q, "api_key": get_api_key()}
+    params = {"engine": "youtube", "search_query": q, "api_key": get_serp_api_key()}
     if hl:
         params["hl"] = hl
     if gl:
