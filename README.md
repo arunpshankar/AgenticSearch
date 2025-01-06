@@ -8,6 +8,10 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 
+export PYTHONDONTWRITEBYTECODE=1
+
+export PYTHONPATH=$PYTHONPATH:.
+
 
 
 streamlit run 
