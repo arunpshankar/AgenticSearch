@@ -58,3 +58,91 @@ import json
 
 Observation = Union[str, Exception]
 PROMPT_TEMPLATE_PATH = "./templates/react.txt"
+
+class Name(Enum):
+    WIKI_SEARCH = auto()
+    GOOGLE_SEARCH = auto()
+    MULTIPLE_CAT_FACTS = auto()
+    CAT_FACT = auto()
+    CAT_BREEDS = auto()
+    DOG_IMAGE = auto()
+    MULTIPLE_DOG_IMAGES = auto()
+    DOG_BREED_IMAGE = auto()
+    RANDOM_JOKE = auto()
+    TEN_RANDOM_JOKES = auto()
+    RANDOM_JOKE_BY_TYPE = auto()
+    PREDICT_AGE = auto()
+    PREDICT_GENDER = auto()
+    PREDICT_NATIONALITY = auto()
+    ZIP_INFO = auto()
+    PUBLIC_IP = auto()
+    ARTWORK_DATA = auto()
+    ISS_LOCATION = auto()
+    LYRICS = auto()
+    RANDOM_FOX_IMAGE = auto()
+    TRIVIA_QUESTIONS = auto()
+    EXCHANGE_RATES = auto()
+    GOOGLE_IMAGE_SEARCH = auto()
+    GOOGLE_NEWS_SEARCH = auto()
+    GOOGLE_MAPS_SEARCH = auto()
+    GOOGLE_MAPS_PLACE = auto()
+    GOOGLE_JOBS_SEARCH = auto()
+    GOOGLE_SHOPPING_SEARCH = auto()
+    GOOGLE_TRENDS_INTEREST = auto()
+    GOOGLE_TRENDS_BREAKDOWN = auto()
+    GOOGLE_TRENDS_REGION = auto()
+    GOOGLE_LENS_SEARCH = auto()
+    GOOGLE_PLAY_SEARCH = auto()
+    GOOGLE_LOCAL_SEARCH = auto()
+    GOOGLE_EVENTS_SEARCH = auto()
+    GOOGLE_VIDEOS_SEARCH = auto()
+    GOOGLE_REVERSE_IMAGE_SEARCH = auto()
+    GOOGLE_FINANCE_SEARCH = auto()
+    GOOGLE_FINANCE_CURRENCY_EXCHANGE = auto()
+    GOOGLE_LOCATION_SPECIFIC_SEARCH = auto()
+    WALMART_SEARCH = auto()
+    YOUTUBE_SEARCH = auto()
+    GEMINI_MULTIMODAL = auto()
+    NONE = "none"
+
+class Tool:
+    def __init__(self, name: Name, func: Callable[[Union[str, Dict[str, str]]], str]):
+        self.name = name
+        self.func = func
+
+    def use(self, query: Union[str, Dict[str, str]]) -> Observation:
+        try:
+            return self.func(query)
+        except Exception as e:
+            logger.error(f"Error executing tool {self.name}: {e}")
+            return str(e)
+        
+class Message(BaseModel):
+    role: str
+    content: str
+
+    # Use mode="before" to intercept the raw input before pydantic enforces string type
+    @field_validator('content', mode='before')
+    @classmethod
+    def validate_content(cls, v):
+        if isinstance(v, dict):
+            return json.dumps(v)
+        return str(v)
+class MultimodalContent(BaseModel):
+    text: str
+    image_path: str
+
+    def to_dict(self) -> Dict[str, str]:
+        return {"text": self.text, "image_path": self.image_path}
+
+def create_message(role: str, content: Union[str, Dict, Any]) -> Message:
+    try:
+        return Message(role=role, content=content)
+    except ValidationError as e:
+        raise ValueError(f"Message creation failed: {str(e)}")
+
+class ActionState(BaseModel):
+    tool_name: str
+    input: str
+    result: Optional[Any] = None
+    status: str = "pending"  # pending, completed, failed
