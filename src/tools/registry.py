@@ -1,5 +1,5 @@
 from src.llm.gemini_text_image import generate_multimodal_content
-from src.config.serp import get_api_key
+from src.config.setup import get_serp_api_key
 from src.config.logging import logger
 from typing import Optional
 from typing import Union

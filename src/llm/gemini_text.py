@@ -1,4 +1,4 @@
-from src.config.client import initialize_genai_client
+from src.config.setup import initialize_genai_client
 from src.config.logging import logger
 from google import genai
 import time

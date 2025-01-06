@@ -1,4 +1,4 @@
-from src.config.client import initialize_genai_client
+from src.config.setup import initialize_genai_client
 from src.config.logging import logger
 from pathlib import Path
 from PIL import Image

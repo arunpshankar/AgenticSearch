@@ -14,6 +14,7 @@ IMAGES_DIR: str = os.path.join(PROJECT_ROOT, 'img')
 GOOGLE_ICON_PATH: str = os.path.join(IMAGES_DIR, 'google_logo.svg')
 TEMPLATES_DIR: str = os.path.join(PROJECT_ROOT, 'templates')
 CREDENTIALS_FILE: str = os.path.join(PROJECT_ROOT, 'credentials', 'api.yml')
+MODEL = "gemini-2.0-flash-exp"
 
 # Global Configuration
 CONFIG: Dict[str, Any] = load_yaml(CREDENTIALS_FILE)

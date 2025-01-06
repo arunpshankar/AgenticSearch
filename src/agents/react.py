@@ -45,6 +45,7 @@ from src.config.logging import logger
 from pydantic import ValidationError
 from pydantic import field_validator
 from src.utils.io import read_file
+from src.config.setup import MODEL
 from pydantic import BaseModel
 from typing import Callable
 from typing import Optional
@@ -106,43 +107,501 @@ class Name(Enum):
     NONE = "none"
 
 class Tool:
+    """
+    Represents a tool with a name and functionality.
+
+    Attributes:
+        name (Name): The name of the tool, represented as an enum member.
+        func (Callable): The function to execute the tool's operation.
+    """
     def __init__(self, name: Name, func: Callable[[Union[str, Dict[str, str]]], str]):
         self.name = name
         self.func = func
 
     def use(self, query: Union[str, Dict[str, str]]) -> Observation:
+        """
+        Executes the tool's function with the provided query.
+
+        Args:
+            query (Union[str, Dict[str, str]]): The input query for the tool.
+
+        Returns:
+            Observation: The result of the tool execution or an error message.
+        """
         try:
             return self.func(query)
         except Exception as e:
             logger.error(f"Error executing tool {self.name}: {e}")
             return str(e)
-        
+
 class Message(BaseModel):
+    """
+    Represents a message in the system.
+
+    Attributes:
+        role (str): The role of the sender (e.g., "user", "system").
+        content (str): The content of the message, which can be a string or serialized JSON.
+    """
     role: str
     content: str
 
-    # Use mode="before" to intercept the raw input before pydantic enforces string type
     @field_validator('content', mode='before')
     @classmethod
     def validate_content(cls, v):
+        """
+        Validates and serializes content into a string.
+
+        Args:
+            v (Union[str, Dict]): The input content.
+
+        Returns:
+            str: Serialized string content.
+        """
         if isinstance(v, dict):
             return json.dumps(v)
         return str(v)
+
 class MultimodalContent(BaseModel):
+    """
+    Represents multimodal content with text and image.
+
+    Attributes:
+        text (str): The textual content.
+        image_path (str): The path to the associated image.
+    """
     text: str
     image_path: str
 
     def to_dict(self) -> Dict[str, str]:
+        """
+        Converts the multimodal content to a dictionary.
+
+        Returns:
+            Dict[str, str]: A dictionary with text and image_path.
+        """
         return {"text": self.text, "image_path": self.image_path}
 
+class ActionState(BaseModel):
+    """
+    Represents the state of an action performed by a tool.
+
+    Attributes:
+        tool_name (str): The name of the tool used.
+        input (str): The input provided to the tool.
+        result (Optional[Any]): The result of the action, if available.
+        status (str): The current status of the action (e.g., "pending", "completed", "failed").
+    """
+    tool_name: str
+    input: str
+    result: Optional[Any] = None
+    status: str = "pending"
+
+
 def create_message(role: str, content: Union[str, Dict, Any]) -> Message:
+    """
+    Creates a new Message object with the specified role and content.
+
+    Args:
+        role (str): The role associated with the message (e.g., 'user', 'assistant').
+        content (Union[str, Dict, Any]): The content of the message. 
+            Can be a string, dictionary, or any other data type compatible with the Message object.
+
+    Returns:
+        Message: A Message object initialized with the provided role and content.
+
+    Raises:
+        ValueError: If the Message object creation fails due to validation errors,
+                    a ValueError is raised with details about the failure.
+    """
     try:
         return Message(role=role, content=content)
     except ValidationError as e:
         raise ValueError(f"Message creation failed: {str(e)}")
 
-class ActionState(BaseModel):
-    tool_name: str
-    input: str
-    result: Optional[Any] = None
-    status: str = "pending"  # pending, completed, failed
+class Agent:
+    """
+    Represents an intelligent agent capable of interacting with tools, maintaining action history,
+    and executing tasks iteratively based on user input and model responses.
+
+    Attributes:
+        model (str): The name of the language model used by the agent.
+        max_iterations (int): The maximum number of iterations allowed for processing a query.
+        tools (Dict[Name, Tool]): A registry of tools available to the agent.
+        messages (List[Message]): A log of messages exchanged between the user, system, and agent.
+        query (str): The current query being processed.
+        image_path (Optional[str]): Path to an image for multimodal queries.
+        current_iteration (int): The current iteration count of the agent.
+        template (str): The prompt template loaded for generating responses.
+        client: The initialized client for interacting with the language model.
+        action_history (List[ActionState]): A history of actions executed by the agent.
+        last_action_result (Optional[Any]): The result of the last action executed by the agent.
+    """
+
+    def __init__(self, model: str, max_iterations: int) -> None:
+        """
+        Initialize the agent with a specified model and maximum iterations.
+
+        Args:
+            model (str): The model name to use for generating responses.
+            max_iterations (int): Maximum iterations allowed for query processing.
+
+        Raises:
+            ValueError: If `model` is not a string or `max_iterations` is not a positive integer.
+        """
+        self.model = model
+        self.tools: Dict[Name, Tool] = {}
+        self.messages: List[Message] = []
+        self.query = ""
+        self.image_path = None
+        self.max_iterations = max_iterations
+        self.current_iteration = 0
+        self.template = self.load_template()
+        self.client = initialize_genai_client()
+        self.action_history: List[ActionState] = []
+        self.last_action_result: Optional[Any] = None
+
+        if not isinstance(model, str):
+            raise ValueError("Model must be a string")
+        if not isinstance(max_iterations, int) or max_iterations <= 0:
+            raise ValueError("max_iterations must be a positive integer")
+
+    def get_last_action_result(self) -> Optional[Any]:
+        """
+        Get the result of the last executed action.
+        """
+        if self.action_history:
+            return self.action_history[-1].result
+        return None
+
+    def add_action_state(self, tool_name: str, input_query: str) -> None:
+        """
+        Add a new action state to history.
+
+        Args:
+            tool_name (str): The name of the tool used.
+            input_query (str): The input query for the action.
+        """
+        self.action_history.append(ActionState(tool_name=tool_name, input=input_query))
+
+    def update_last_action_state(self, result: Any, status: str) -> None:
+        """
+        Update the state of the last action.
+
+        Args:
+            result (Any): The result of the action.
+            status (str): The status of the action (e.g., "completed" or "failed").
+        """
+        if self.action_history:
+            last_action = self.action_history[-1]
+            last_action.result = result
+            last_action.status = status
+            self.last_action_result = result
+
+    def load_template(self) -> str:
+        """
+        Load the prompt template for generating responses."""
+        return read_file(PROMPT_TEMPLATE_PATH)
+
+    def register_tool(self, name: Name, func: Callable[[str], str]) -> None:
+        """
+        Register a tool for the agent.
+
+        Args:
+            name (Name): The name of the tool.
+            func (Callable[[str], str]): The function to execute for the tool.
+        """
+        self.tools[name] = Tool(name, func)
+
+    def trace(self, role: str, content: str) -> None:
+        """
+        Log a message in the message history.
+
+        Args:
+            role (str): The role of the message sender (e.g., "user" or "assistant").
+            content (str): The content of the message.
+        """
+        if role != "system":
+            self.messages.append(Message(role=role, content=content))
+
+    def get_history(self) -> str:
+        """
+        Retrieve the conversation history including action results."""
+        history = []
+        for msg in self.messages:
+            history.append(f"{msg.role}: {msg.content}")
+        if self.last_action_result:
+            history.append(f"Last action result: {json.dumps(self.last_action_result, indent=2)}")
+        return "\n".join(history)
+
+    def ask_gemini(self, prompt: str) -> dict:
+        """
+        Generate a response using the language model.
+
+        Args:
+            prompt (str): The input prompt for the model.
+
+        Returns:
+            dict: The response from the model, parsed as JSON.
+        """
+        try:
+            if self.image_path:
+                multimodal_input = {
+                    "text": prompt,
+                    "image_path": self.image_path
+                }
+                response = self.tools[Name.GEMINI_MULTIMODAL].use(multimodal_input)
+            else:
+                response = generate_content(self.client, self.model, prompt)
+                response = str(response.text) if response else {"error": "No response from Gemini"}
+
+            cleaned_response = response.strip().strip('`').strip()
+            if cleaned_response.startswith('json'):
+                cleaned_response = cleaned_response[4:].strip()
+
+            return json.loads(cleaned_response)
+        except Exception as e:
+            logger.error(f"Error in ask_gemini: {e}")
+            return {"error": str(e)}
+
+    def think(self):
+        """
+        Generate the agent's next step based on the current query and context."""
+        self.current_iteration += 1
+        if self.current_iteration > self.max_iterations:
+            self.trace("assistant",
+                       "I couldn't find a satisfactory answer within the allowed iterations.")
+            return None
+
+        last_result = self.get_last_action_result()
+        prompt = self.template.format(
+            query=self.query,
+            image_context=self.image_path,
+            history=self.get_history(),
+            tools=', '.join([str(t.name) for t in self.tools.values()]),
+            last_result=json.dumps(last_result) if last_result else "None"
+        )
+
+        response = self.ask_gemini(prompt)
+        if "error" in response:
+            self.trace("assistant", f"Error in thinking: {response['error']}")
+            return None
+
+        self.trace("assistant", f"Thought: {response}")
+        return response
+
+    def decide_and_act(self, response: dict):
+        """
+        Interpret the model's response and execute the appropriate action.
+
+        Args:
+            response (dict): The response from the model, parsed as JSON.
+
+        Returns:
+            Optional[Any]: The final answer, if available.
+        """
+        try:
+            if "action" in response:
+                action = response["action"]
+                name_str = action["name"].upper()
+
+                if name_str == "NONE":
+                    return None
+
+                tool_name = Name[name_str]
+                self.trace("assistant", f"Action: Using {tool_name} tool")
+
+                if tool_name == Name.GEMINI_MULTIMODAL:
+                    action_input = action.get("input", {})
+                    if isinstance(action_input, str):
+                        action_input = {"text": action_input}
+
+                    query_input = {
+                        "text": action_input.get("text", self.query),
+                        "image_path": action_input.get("image_path", self.image_path)
+                    }
+                else:
+                    query_input = action.get("input", self.query)
+
+                self.add_action_state(name_str, str(query_input))
+
+                result = self.tools[tool_name].use(query_input)
+
+                if isinstance(result, Exception):
+                    self.update_last_action_state(str(result), "failed")
+                    observation = f"Error using {tool_name}: {result}"
+                else:
+                    self.update_last_action_state(result, "completed")
+                    observation = f"Observation from {tool_name}: {result}"
+
+                self.trace("system", observation)
+                return None
+
+            elif "answer" in response:
+                final = response["answer"]
+                self.trace("assistant", f"Final Answer: {final}")
+                return final
+
+            else:
+                raise ValueError("Unrecognized JSON structure")
+
+        except Exception as e:
+            logger.error(f"Error in decide_and_act: {e}")
+            self.trace("assistant", f"I encountered an error: {str(e)}. Let me try again.")
+            return None
+
+    def run_iter(self, query: Dict[str, Any]):
+        """
+        Run a single iteration of the agent's execution loop.
+
+        Args:
+            query (Dict[str, Any]): A dictionary containing the query text and optional image path.
+
+        Yields:
+            Dict[str, Any]: The state of the agent after each iteration.
+        """
+        logger.info(f'Raw Query: {query}')
+
+        if isinstance(query, dict):
+            self.query = query.get('text', '')
+            self.image_path = query.get('image_path')
+        else:
+            self.query = str(query)
+            self.image_path = None
+
+        if self.image_path:
+            query_content = {
+                "text": self.query,
+                "image_path": self.image_path
+            }
+        else:
+            query_content = self.query
+
+        self.trace("user", query_content)
+        final_answer = None
+
+        while final_answer is None and self.current_iteration < self.max_iterations:
+            response = self.think()
+            if response is None:
+                yield {
+                    "iteration": self.current_iteration,
+                    "messages": [],
+                    "done": True,
+                }
+                break
+
+            iteration_messages = []
+            start_index = len(self.messages) - 1
+
+            if self.image_path and "action" in response:
+                action = response["action"]
+                if action["name"] != "GEMINI_MULTIMODAL":
+                    action["name"] = "GEMINI_MULTIMODAL"
+                    action["input"] = {
+                        "text": action.get("input", self.query),
+                        "image_path": self.image_path
+                    }
+                    response["action"] = action
+
+            final_answer = self.decide_and_act(response)
+            end_index = len(self.messages)
+
+            iteration_messages = self.messages[start_index:end_index]
+
+            yield {
+                "iteration": self.current_iteration,
+                "messages": iteration_messages,
+                "done": (final_answer is not None)
+            }
+
+        yield {
+            "iteration": self.current_iteration,
+            "messages": [],
+            "done": True,
+        }
+
+
+def build_agent(max_iterations: int) -> Agent:
+    """
+    Helper function to instantiate an Agent, register all tools, and return it.
+
+    Args:
+        max_iterations (int): The maximum number of iterations the agent can perform.
+
+    Returns:
+        Agent: An instance of the Agent class with registered tools.
+    """
+    agent = Agent(model=MODEL, max_iterations=max_iterations)
+
+    # Register tools for the agent
+    agent.register_tool(Name.WIKI_SEARCH, get_wiki_search_results)
+    agent.register_tool(Name.GOOGLE_SEARCH, get_google_search_results)
+    agent.register_tool(Name.CAT_FACT, get_cat_fact)
+    agent.register_tool(Name.WALMART_SEARCH, get_walmart_basic_search)
+    agent.register_tool(Name.MULTIPLE_CAT_FACTS, get_multiple_cat_facts)
+    agent.register_tool(Name.CAT_BREEDS, get_cat_breeds)
+    agent.register_tool(Name.DOG_IMAGE, get_random_dog_image)
+    agent.register_tool(Name.MULTIPLE_DOG_IMAGES, get_multiple_dog_images)
+    agent.register_tool(Name.DOG_BREED_IMAGE, get_random_dog_breed_image)
+    agent.register_tool(Name.RANDOM_JOKE, get_random_joke)
+    agent.register_tool(Name.TEN_RANDOM_JOKES, get_ten_random_jokes)
+    agent.register_tool(Name.RANDOM_JOKE_BY_TYPE, get_random_joke_by_type)
+    agent.register_tool(Name.PREDICT_AGE, get_predicted_age_by_name)
+    agent.register_tool(Name.PREDICT_GENDER, get_gender_by_name)
+    agent.register_tool(Name.PREDICT_NATIONALITY, get_nationality_by_name)
+    agent.register_tool(Name.ZIP_INFO, get_zip_info)
+    agent.register_tool(Name.PUBLIC_IP, get_public_ip)
+    agent.register_tool(Name.ARTWORK_DATA, get_artwork_data)
+    agent.register_tool(Name.ISS_LOCATION, get_iss_location)
+    agent.register_tool(Name.LYRICS, get_lyrics)
+    agent.register_tool(Name.RANDOM_FOX_IMAGE, get_random_fox_image)
+    agent.register_tool(Name.TRIVIA_QUESTIONS, get_trivia_questions)
+    agent.register_tool(Name.EXCHANGE_RATES, get_exchange_rates)
+    agent.register_tool(Name.GOOGLE_IMAGE_SEARCH, get_google_image_search_results)
+    agent.register_tool(Name.GOOGLE_NEWS_SEARCH, get_google_news_search)
+    agent.register_tool(Name.GOOGLE_MAPS_SEARCH, get_google_maps_search)
+    agent.register_tool(Name.GOOGLE_MAPS_PLACE, get_google_maps_place)
+    agent.register_tool(Name.GOOGLE_JOBS_SEARCH, get_google_jobs_search)
+    agent.register_tool(Name.GOOGLE_SHOPPING_SEARCH, get_google_shopping_search)
+    agent.register_tool(Name.GOOGLE_TRENDS_INTEREST, get_google_trends_interest_over_time)
+    agent.register_tool(Name.GOOGLE_TRENDS_BREAKDOWN, get_google_trends_compared_breakdown)
+    agent.register_tool(Name.GOOGLE_TRENDS_REGION, get_google_trends_interest_by_region)
+    agent.register_tool(Name.YOUTUBE_SEARCH, get_youtube_basic_search)
+    agent.register_tool(Name.GOOGLE_PLAY_SEARCH, get_google_play_query_search)
+    agent.register_tool(Name.GOOGLE_LOCAL_SEARCH, get_google_local_basic_search)
+    agent.register_tool(Name.GOOGLE_VIDEOS_SEARCH, get_google_videos_basic_search)
+    agent.register_tool(Name.GOOGLE_EVENTS_SEARCH, get_google_events_basic_search)
+    agent.register_tool(Name.GOOGLE_FINANCE_SEARCH, get_google_finance_basic_search)
+    agent.register_tool(Name.GOOGLE_FINANCE_CURRENCY_EXCHANGE, get_google_finance_currency_exchange)
+    agent.register_tool(Name.GOOGLE_LOCATION_SPECIFIC_SEARCH, get_google_location_specific_search)
+    agent.register_tool(Name.GEMINI_MULTIMODAL, get_multimodal_reasoning)
+
+    return agent
+
+def run_react_agent(query: str, max_iterations: int):
+    """
+    Executes the ReAct agent with the given query and maximum iterations.
+
+    Args:
+        query (str): The input query string for the agent to process.
+        max_iterations (int): The maximum number of iterations the agent is allowed.
+
+    Returns:
+        Generator: A generator yielding data for each iteration, including messages and completion status.
+    """
+    agent = build_agent(max_iterations=max_iterations)
+    return agent.run_iter(query)
+
+
+if __name__ == "__main__":
+    query = {
+        "text": "Find the current exchange rate for USD to INR, retrieve trivia questions about currency, and show a random dog image to lighten the mood.",
+    }
+    max_iterations = 5
+
+    for iteration_data in run_react_agent(query, max_iterations):
+        print(f"Iteration {iteration_data['iteration']}:")
+        for message in iteration_data['messages']:
+            print(f"{message.role}: {message.content}")
+        if iteration_data["done"]:
+            print("Task completed.")
+            break

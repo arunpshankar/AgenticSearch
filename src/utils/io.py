@@ -1,4 +1,3 @@
-from src.config.setup import PROJECT_ROOT
 from src.config.logging import logger 
 from typing import Optional
 from typing import Dict 
