@@ -593,15 +593,15 @@ def run_react_agent(query: str, max_iterations: int):
 
 
 if __name__ == "__main__":
-    query = {
-        "text": "Find the current exchange rate for USD to INR, retrieve trivia questions about currency, and show a random dog image to lighten the mood.",
+    complex_query = {
+        "text": "Tell me about the history of the Eiffel Tower and suggest some nearby attractions to visit.",
     }
     max_iterations = 10
 
-    for iteration_data in run_react_agent(query, max_iterations):
-        print(f"Iteration {iteration_data['iteration']}:")
+    for iteration_data in run_react_agent(complex_query, max_iterations):
+        logger.info(f"Iteration {iteration_data['iteration']}:")
         for message in iteration_data['messages']:
-            print(f"{message.role}: {message.content}")
+            logger.info(f"{message.role}: {message.content}")
         if iteration_data["done"]:
-            print("Task completed.")
+            logger.info("Task completed.")
             break
