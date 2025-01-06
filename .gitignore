@@ -6,6 +6,20 @@ __pycache__/
 # C extensions
 *.so
 
+# venv 
+.venv
+.venv/
+.agentic-search
+.agentic-search/
+
+# DS_Store
+DS_Store
+DS_Store/
+
+# credentials 
+credentials
+credentials/
+
 # Distribution / packaging
 .Python
 build/
