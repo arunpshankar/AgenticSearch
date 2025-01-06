@@ -46,53 +46,6 @@ def load_api_key(file_path: str) -> str:
         raise
 
 
-def save_app_code(app_name_slug: str, frontend_code: str, backend_code: str) -> None:
-    """
-    Save the generated frontend and backend code to the appropriate location.
-
-    Args:
-        app_name_slug (str): The slugified app name.
-        frontend_code (str): The frontend code as a string.
-        backend_code (str): The backend code as a string.
-    """
-    apps_dir = os.path.join(PROJECT_ROOT, 'src', 'apps', app_name_slug)
-    os.makedirs(apps_dir, exist_ok=True)
-
-    frontend_path = os.path.join(apps_dir, 'frontend.py')
-    backend_path = os.path.join(apps_dir, 'backend.py')
-
-    try:
-        with open(frontend_path, 'w', encoding='utf-8') as f:
-            f.write(frontend_code)
-        with open(backend_path, 'w', encoding='utf-8') as f:
-            f.write(backend_code)
-        logger.info("App code saved to: %s and %s", frontend_path, backend_path)
-    except Exception as e:
-        logger.error("Failed to save app code: %s", e)
-
-
-def read_file(path: str) -> Optional[str]:
-    """
-    Reads the content of a markdown file and returns it as a text object.
-
-    Args:
-        path (str): The path to the markdown file.
-
-    Returns:
-        Optional[str]: The content of the file as a string, or None if the file could not be read.
-    """
-    try:
-        with open(path, 'r', encoding='utf-8') as file:
-            content: str = file.read()
-        return content
-    except FileNotFoundError:
-        logger.info(f"File not found: {path}")
-        return None
-    except Exception as e:
-        logger.info(f"Error reading file: {e}")
-        return None
-
-
 def load_yaml(filename: str) -> Dict[str, Any]:
     """
     Load a YAML file and return its contents.
@@ -149,6 +102,53 @@ def load_json(filename: str) -> Optional[Dict[str, Any]]:
     except Exception as e:
         logger.error(f"Error loading JSON file: {e}")
         raise
+
+
+def read_file(path: str) -> Optional[str]:
+    """
+    Reads the content of a markdown file and returns it as a text object.
+
+    Args:
+        path (str): The path to the markdown file.
+
+    Returns:
+        Optional[str]: The content of the file as a string, or None if the file could not be read.
+    """
+    try:
+        with open(path, 'r', encoding='utf-8') as file:
+            content: str = file.read()
+        return content
+    except FileNotFoundError:
+        logger.info(f"File not found: {path}")
+        return None
+    except Exception as e:
+        logger.info(f"Error reading file: {e}")
+        return None
+
+
+def save_app_code(app_name_slug: str, frontend_code: str, backend_code: str) -> None:
+    """
+    Save the generated frontend and backend code to the appropriate location.
+
+    Args:
+        app_name_slug (str): The slugified app name.
+        frontend_code (str): The frontend code as a string.
+        backend_code (str): The backend code as a string.
+    """
+    apps_dir = os.path.join(PROJECT_ROOT, 'src', 'apps', app_name_slug)
+    os.makedirs(apps_dir, exist_ok=True)
+
+    frontend_path = os.path.join(apps_dir, 'frontend.py')
+    backend_path = os.path.join(apps_dir, 'backend.py')
+
+    try:
+        with open(frontend_path, 'w', encoding='utf-8') as f:
+            f.write(frontend_code)
+        with open(backend_path, 'w', encoding='utf-8') as f:
+            f.write(backend_code)
+        logger.info("App code saved to: %s and %s", frontend_path, backend_path)
+    except Exception as e:
+        logger.error("Failed to save app code: %s", e)
 
 
 def write_to_file(path: str, content: str) -> None:
