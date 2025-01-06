@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<style>
+/* Search Components */
+.search-wrapper {
+    position: relative;
+    margin: 20px 0;
+}
+
+.thumbnail-wrapper {
+    position: absolute;
+    bottom: -45px;
+    left: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.thumbnail {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.remove-thumbnail {
+    cursor: pointer;
+    color: #666;
+    font-size: 18px;
+    padding: 4px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.remove-thumbnail:hover {
+    color: #ff4444;
+    transform: scale(1.1);
+}
+
+/* Input and Button Styles */
+.stTextInput input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76,175,80,0.1);
+    background: white;
+}
+
+.stButton button {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: linear-gradient(45deg, #2196F3, #4CAF50);
+    border: none;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.stButton button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+</style>
+</html>
