@@ -13,8 +13,8 @@ __pycache__/
 .agentic-search/
 
 # DS_Store
-DS_Store
-DS_Store/
+.DS_Store
+.DS_Store/
 
 # credentials 
 credentials
