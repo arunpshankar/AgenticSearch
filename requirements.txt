@@ -45,6 +45,7 @@ pydeck==0.9.1
 Pygments==2.19.0
 python-dateutil==2.9.0.post0
 pytz==2024.2
+PyYAML==6.0.2
 referencing==0.35.1
 requests==2.32.3
 rich==13.9.4
@@ -60,3 +61,4 @@ tornado==6.4.2
 typing_extensions==4.12.2
 tzdata==2024.2
 urllib3==2.3.0
+Wikipedia-API==0.7.3
