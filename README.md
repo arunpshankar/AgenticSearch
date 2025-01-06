@@ -3,5 +3,11 @@ AgenticSearch uses Gemini 2.0 and an extensive tools registry within an agentic 
 
 
 
-
 pip install --upgrade pip
+
+pip install -r requirements.txt
+
+
+
+
+streamlit run 
