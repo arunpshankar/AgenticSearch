@@ -1067,12 +1067,12 @@ def get_youtube_basic_search(q: str, hl: Optional[str] = None, gl: Optional[str]
         raise
 
 
-def get_multimodal_reasoning(query: Union[str, Dict[str, str]]) -> str:
+def get_multimodal_reasoning(q: Union[str, Dict[str, str]]) -> str:
     """
     Perform multimodal reasoning on text and image inputs using Gemini model.
     
     Args:
-        query (Union[str, Dict[str, str]]): Either:
+        q (Union[str, Dict[str, str]]): Either:
             - A dictionary containing {"text": str, "image_path": str}
             - A JSON string containing {"text": str, "image_path": str}
     
@@ -1085,15 +1085,15 @@ def get_multimodal_reasoning(query: Union[str, Dict[str, str]]) -> str:
     """
     try:
         # Parse input to extract text and image_path
-        if isinstance(query, str):
+        if isinstance(q, str):
             try:
                 # Try parsing as JSON string
-                input_dict = json.loads(query)
+                input_dict = json.loads(q)
             except json.JSONDecodeError:
                 # If not JSON, assume it's a text query
                 raise ValueError("Invalid input format. Expected JSON string or dictionary")
         else:
-            input_dict = query
+            input_dict = q
             
         # Extract required fields
         if not isinstance(input_dict, dict):
@@ -1187,6 +1187,6 @@ if __name__ == "__main__":
     run_test("get_google_play_query_search", get_google_play_query_search, q="weather apps", hl="en", gl="us")
     run_test("get_google_videos_basic_search", get_google_videos_basic_search, q="funny cats", hl="en", gl="us")
     run_test("get_youtube_basic_search", get_youtube_basic_search, q="star wars", hl="en", gl="us")
-    run_test("get_multimodal_reasoning", get_multimodal_reasoning, q="Describe what you see in this image", image_path="./tmp/uploads/sample.jpg")
+    run_test("get_multimodal_reasoning", get_multimodal_reasoning, q=json.dumps({"text": "What's in this image?", "image_path": "./tmp/uploads/sample.jpg"}))
 
     logger.info(f"Tests completed. Passed: {tests_passed}, Failed: {tests_failed}")
