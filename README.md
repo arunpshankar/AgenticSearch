@@ -65,12 +65,64 @@ Ensure you have the necessary API keys (e.g., SerpAPI) and other credentials in 
 
 ## Tools and APIs
 
-Agentic Search integrates a robust toolset, including:
+Agentic Search integrates a wide range of tools from `registry.py`, enabling diverse functionalities:
 
-- **Wikipedia API**: Fetch summaries of topics.
-- **SerpAPI**: Perform Google search, image search, and trends analysis.
-- **Public APIs**: Retrieve facts, jokes, and other informative content.
-- **Custom Tools**: Extend functionality with Gemini 2.0 for text-image reasoning.
+- **Wikipedia Tools**:
+  - `get_wiki_search_results`: Fetch summaries and metadata from Wikipedia.
+
+- **Facts and Trivia**:
+  - `get_cat_fact`: Retrieve a random cat fact.
+  - `get_multiple_cat_facts`: Fetch multiple cat facts.
+  - `get_cat_breeds`: Retrieve a list of cat breeds.
+  - `get_random_joke`: Fetch a random joke.
+  - `get_ten_random_jokes`: Retrieve ten random jokes.
+  - `get_random_joke_by_type`: Fetch a random joke of a specific type.
+  - `get_trivia_questions`: Retrieve trivia questions.
+
+- **Animal Images**:
+  - `get_random_dog_image`: Fetch a random dog image.
+  - `get_multiple_dog_images`: Retrieve multiple random dog images.
+  - `get_random_dog_breed_image`: Fetch an image of a specific dog breed.
+  - `get_random_fox_image`: Fetch a random fox image.
+
+- **Demographic Predictions**:
+  - `get_predicted_age_by_name`: Predict age based on a name.
+  - `get_gender_by_name`: Predict gender based on a name.
+  - `get_nationality_by_name`: Predict nationality based on a name.
+
+- **Location and Public Data**:
+  - `get_zip_info`: Retrieve location data for U.S. ZIP codes.
+  - `get_public_ip`: Fetch the public IP address of the requester.
+  - `get_iss_location`: Get the current location of the International Space Station.
+
+- **Google and SerpAPI Tools**:
+  - `get_google_search_results`: Perform a Google search.
+  - `get_google_image_search_results`: Fetch Google Images search results.
+  - `get_google_news_search`: Perform a Google News search.
+  - `get_google_maps_search`: Search for places using Google Maps.
+  - `get_google_maps_place`: Retrieve details of a specific place.
+  - `get_google_jobs_search`: Perform a Google Jobs search.
+  - `get_google_shopping_search`: Fetch Google Shopping results.
+  - `get_google_trends_interest_over_time`: Retrieve Google Trends interest-over-time data.
+  - `get_google_trends_compared_breakdown`: Fetch compared breakdown data for multiple queries.
+  - `get_google_trends_interest_by_region`: Retrieve Google Trends interest-by-region data.
+  - `get_google_local_basic_search`: Perform a local business search.
+  - `get_google_play_query_search`: Search for apps in the Google Play Store.
+  - `get_google_events_basic_search`: Retrieve event details from Google.
+  - `get_google_videos_basic_search`: Perform a Google Videos search.
+  - `get_google_finance_basic_search`: Fetch Google Finance data.
+  - `get_google_finance_currency_exchange`: Retrieve exchange rate data for currency pairs.
+
+- **Third-Party APIs**:
+  - `get_walmart_basic_search`: Search for products on Walmart.
+  - `get_artwork_data`: Fetch artwork data from the Art Institute of Chicago.
+  - `get_lyrics`: Retrieve song lyrics.
+  - `get_google_trends_interest_over_time`: Fetch Google Trends interest-over-time data.
+
+- **Multimodal Reasoning**:
+  - `get_multimodal_reasoning`: Perform reasoning based on both text and image inputs.
+
+This comprehensive tool registry enables Agentic Search to address a wide variety of user queries.
 
 #
 
