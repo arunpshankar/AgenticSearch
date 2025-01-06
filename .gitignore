@@ -20,6 +20,10 @@ DS_Store/
 credentials
 credentials/
 
+# tmp
+tmp
+tmp/
+
 # Distribution / packaging
 .Python
 build/
