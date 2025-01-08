@@ -38,6 +38,7 @@ def get_google_api_key(config: Dict[str, Any] = CONFIG) -> str:
         raise ValueError("Google API key not found in the configuration.")
     return api_key
 
+
 def get_serp_api_key(config: Dict[str, Any] = CONFIG) -> str:
     """
     Extract the SERP API key from the configuration.
@@ -56,6 +57,7 @@ def get_serp_api_key(config: Dict[str, Any] = CONFIG) -> str:
         logger.error("SERP API key is missing in the configuration.")
         raise ValueError("SERP API key not found in the configuration.")
     return api_key
+
 
 def initialize_genai_client(config: Dict[str, Any] = CONFIG) -> genai.Client:
     """
