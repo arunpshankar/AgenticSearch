@@ -62,7 +62,7 @@ def display_header() -> None:
     Displays the main title and subtitle at the top of the page.
     """
     st.markdown("<h1 class='main-title'>Agentic Search</h1>", unsafe_allow_html=True)
-    st.markdown("<div class='subtitle'>Discover Insights Through AI-Powered Exploration</div>", unsafe_allow_html=True)
+    st.markdown("<div class='subtitle'>Navigating Knowledge with Intelligent AI Exploration</div>", unsafe_allow_html=True)
 
 
 def handle_file_upload(uploaded_file: Optional[Any]) -> Tuple[Optional[str], str]:
