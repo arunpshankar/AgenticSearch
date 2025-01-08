@@ -343,6 +343,38 @@ def get_public_ip() -> Dict[str, Any]:
         raise
 
 
+def get_public_ip_with_location() -> Dict[str, Any]:
+    """
+    Retrieves the public IP address and its approximate location.
+
+    :return: A dictionary containing the public IP address and location details.
+    :raises requests.HTTPError: If the request fails.
+    """
+    ip_base_url = "https://api.ipify.org"
+    ip_params = {"format": "json"}
+    geo_base_url = "http://ip-api.com/json"  # or "https://ipinfo.io/{ip}/json"
+
+    try:
+        # Step 1: Get the public IP address
+        response = requests.get(ip_base_url, params=ip_params)
+        response.raise_for_status()
+        ip_info = response.json()
+        public_ip = ip_info.get("ip")
+        logger.info(f"Retrieved public IP: {public_ip}")
+
+        # Step 2: Get the location of the IP address
+        location_response = requests.get(f"{geo_base_url}/{public_ip}")
+        location_response.raise_for_status()
+        location_info = location_response.json()
+        logger.info(f"Retrieved geolocation info: {location_info}")
+
+        return {"ip": public_ip, "location": location_info}
+
+    except requests.RequestException as e:
+        logger.error(f"Failed to retrieve public IP or geolocation: {e}")
+        raise
+
+
 def get_artwork_data(limit: Optional[int] = None, page: Optional[int] = None, fields: Optional[str] = None) -> Dict[str, Any]:
     """
     Access artwork data from the Art Institute of Chicago's collection.
@@ -1163,6 +1195,7 @@ if __name__ == "__main__":
     run_test("get_exchange_rates", get_exchange_rates, base="USD")
     run_test("get_zip_info", get_zip_info, zip_code="90210")
     run_test("get_public_ip", get_public_ip)
+    run_test("get_public_ip_with_location", get_public_ip_with_location)
     run_test("get_artwork_data", get_artwork_data, limit=2, fields="title,artist_title")
     run_test("get_iss_location", get_iss_location)
     run_test("get_lyrics", get_lyrics, artist="Adele", title="Hello")

@@ -9,6 +9,7 @@ from src.tools.registry import get_google_events_basic_search
 from src.tools.registry import get_google_videos_basic_search
 from src.tools.registry import get_google_local_basic_search
 from src.tools.registry import get_google_play_query_search
+from src.tools.registry import get_public_ip_with_location
 from src.tools.registry import get_random_dog_breed_image
 from src.tools.registry import get_google_shopping_search
 from src.tools.registry import get_predicted_age_by_name
@@ -77,6 +78,7 @@ class Name(Enum):
     PREDICT_NATIONALITY = auto()
     ZIP_INFO = auto()
     PUBLIC_IP = auto()
+    CURRENT_LOCATION = auto()
     ARTWORK_DATA = auto()
     ISS_LOCATION = auto()
     LYRICS = auto()
@@ -129,7 +131,10 @@ class Tool:
             Observation: The result of the tool execution or an error message.
         """
         try:
-            return self.func(query)
+            if query:
+                return self.func(query)
+            else:
+                return self.func()
         except Exception as e:
             logger.error(f"Error executing tool {self.name}: {e}")
             return str(e)
@@ -550,6 +555,7 @@ def build_agent(max_iterations: int) -> Agent:
     agent.register_tool(Name.PREDICT_NATIONALITY, get_nationality_by_name)
     agent.register_tool(Name.ZIP_INFO, get_zip_info)
     agent.register_tool(Name.PUBLIC_IP, get_public_ip)
+    agent.register_tool(Name.CURRENT_LOCATION, get_public_ip_with_location)
     agent.register_tool(Name.ARTWORK_DATA, get_artwork_data)
     agent.register_tool(Name.ISS_LOCATION, get_iss_location)
     agent.register_tool(Name.LYRICS, get_lyrics)

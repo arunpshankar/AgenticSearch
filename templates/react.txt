@@ -39,56 +39,323 @@ Remember:
 - If you cannot find the necessary information after using available tools, admit that you don't have enough information to answer the query confidently.
 - When both query and image context is provided, consider using GEMINI_MULTIMODAL 
 - when images are asked by the user, make sure to extract relevant URLs (IMPORTANT)
+- Use tool `CURRENT_LOCATION` to determine the current location when query has mentions like "near me", "nearby" etc.
 
 
-Here is a matrix of what the tools (APIs) can do:
+TOOL DEFINITIONS
+================
 
-name,category,description
-cat facts,animal,Retrieve a random cat fact.
-cat facts,animal,Retrieve a random cat fact with a maximum length.
-cat facts,animal,Retrieve multiple cat facts.
-cat facts,animal,Retrieve a list of cat breeds.
-dog facts,animal,Retrieve a random dog image.
-dog facts,animal,Retrieve multiple random dog images.
-dog facts,animal,Retrieve a random image of a specific breed.
-jokes,entertainment,Retrieve a random joke.
-jokes,entertainment,Retrieve a random joke.
-jokes,entertainment,Retrieve ten random jokes.
-jokes,entertainment,Retrieve a random joke of a specific type.
-age by name,demographics,Predicts age based on a given name.
-gender by name,demographics,Predicts gender based on a given name.
-nationality by name,demographics,Predicts nationality based on a given name.
-zip info,location,Provides location data for U.S. ZIP codes.
-get public ip address,location,Returns the public IP address of the requester.
-art institute of chicago,art and design,Access artwork data from the museum's collection.
-open notify,astronomy,Get the current location of the International Space Station.
-lyrics.ovh,music,Fetch song lyrics by artist and title.
-randomfox,animals,Provides random images of foxes.
-trivia api,entertainment,Offers random trivia questions.
-exchangerate-api,finance,Provides current and historical exchange rates.
-Google Search Results,search,Retrieve Google search results using SerpApi.
-Google Image Search,search,Retrieve Google Images search results.
-Google Location-Specific Search,search,Retrieve search results simulating queries from a given geographic location.
-Google News Search,search,Retrieve Google News search results (set tbm=nws).
-Google Maps Search,maps,Retrieve Google Maps search results from SerpApi.
-Google Maps Place (by place_id),maps,Retrieve a specific place's details on Google Maps using place_id from SerpApi.
-Google Jobs Search,jobs,Retrieve Google Jobs search results from SerpApi.
-Google Shopping Search,shopping,Retrieve Google Shopping search results from SerpApi.
-Walmart Basic Search,walmart,Retrieve Walmart search results from SerpApi using a query.
-Google Trends Interest Over Time,trends,Retrieve 'Interest over time' data for a given query using SerpApi's Google Trends API.
-Google Trends Compared Breakdown by Region,trends,Retrieve 'Compared breakdown by region' data for multiple queries.
-Google Trends Interest by Region,trends,Retrieve 'Interest by region' data for a single query.
-Google Local Basic Search,local,Retrieve local business results by query from SerpApi's Google Local API.
-Google Finance Basic Search,finance,Retrieve Google Finance data for a given ticker or search query from SerpApi.
-Google Finance Currency Exchange,finance,Retrieve exchange rate data for a currency pair.
-Google Events Basic Search,events,"Retrieve events based on a query (e.g., 'Events in Austin, TX')."
-Google Play Apps Query Search,google_play,Retrieve app listings from the Google Play Store by search query.
-Google Videos Basic Search,videos,Retrieve video search results from Google Videos by query.
-YouTube Basic Search,youtube,Retrieve YouTube search results by providing a search_query.
+def get_wiki_search_results(query: str) -> Optional[str]:
+    """
+    Fetch Wikipedia information for a given search query using Wikipedia-API and return as JSON.
 
+    Args:
+        query (str): The search query string.
 
-Here's the single-line version of the Google Trends API documentation:
+    Returns:
+        Optional[str]: A JSON string containing the query, title, and summary, or None if no result is found.
+    """
 
-Here's the endpoint documentation with double curly braces:
+def get_cat_fact(max_length: Optional[int] = None) -> Dict[str, Any]:
+    """
+    Retrieve a random cat fact. Optionally, specify a maximum length for the fact.
 
-Google Trends Compared Breakdown by Region | trends | https://serpapi.com | /search?engine=google_trends | Retrieve 'Compared breakdown by region' data for multiple queries. | q (required, multiple queries, comma-separated), data_type=GEO_MAP (required), geo (optional, string), region (optional, string), date (optional, string), api_key (required, string) | GET https://serpapi.com/search?engine=google_trends&q=coffee,tea&data_type=GEO_MAP&geo=US&region=COUNTRY&date=today+3-m&api_key=YOUR_API_KEY | {{search_metadata: {{status: Success}}, search_parameters: {{q: coffee,tea, data_type: GEO_MAP, geo: US, region: COUNTRY}}, compared_breakdown_by_region: [{{geo_name: California, coffee: 60, tea: 40}}, ...]}}
+    Args:
+        max_length (Optional[int]): Maximum length of the cat fact.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the cat fact.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_multiple_cat_facts(limit: int) -> Dict[str, Any]:
+    """
+    Retrieve multiple cat facts.
+
+    Args:
+        limit (int): Number of cat facts to retrieve.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the cat facts.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_cat_breeds(limit: Optional[int] = None) -> Dict[str, Any]:
+    """
+    Retrieve a list of cat breeds.
+
+    Args:
+        limit (Optional[int]): Number of cat breeds to retrieve.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the list of cat breeds.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_random_dog_image() -> Dict[str, Any]:
+    """
+    Retrieve a random dog image.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the dog image URL.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_multiple_dog_images(number: int) -> Dict[str, Any]:
+    """
+    Retrieve multiple random dog images.
+
+    Args:
+        number (int): Number of dog images to retrieve.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the dog image URLs.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_random_dog_breed_image(breed: str) -> Dict[str, Any]:
+    """
+    Retrieve a random image of a specific dog breed.
+
+    Args:
+        breed (str): The breed of the dog.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the dog image URL.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_random_joke() -> Dict[str, Any]:
+    """
+    Retrieve a random joke.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the joke.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_ten_random_jokes() -> List[Dict[str, Any]]:
+    """
+    Retrieve ten random jokes.
+
+    Returns:
+        List[Dict[str, Any]]: A list of dictionaries containing jokes.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_random_joke_by_type(joke_type: str) -> Dict[str, Any]:
+    """
+    Retrieve a random joke of a specific type.
+
+    Args:
+        joke_type (str): The type of joke to retrieve (e.g., 'programming').
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the joke.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_predicted_age_by_name(name: str, country_id: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Predict the age based on a given name.
+
+    Args:
+        name (str): The name to predict age for.
+        country_id (Optional[str]): The country code.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the predicted age information.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_gender_by_name(name: str, country_id: Optional[str] = None, language_id: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Predicts gender based on a given name.
+
+    Args:
+        name (str): The name to predict gender for.
+        country_id (Optional[str]): The country code.
+        language_id (Optional[str]): The language code.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the predicted gender information.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_nationality_by_name(name: str, country_id: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Predicts nationality based on a given name.
+
+    Args:
+        name (str): The name to predict nationality for.
+        country_id (Optional[str]): The country code.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the predicted nationality information.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_zip_info(zip_code: str) -> Dict[str, Any]:
+    """
+    Provides location data for U.S. ZIP codes.
+
+    Args:
+        zip_code (str): The ZIP code to retrieve information for.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing location data.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_public_ip() -> Dict[str, Any]:
+    """
+    Returns the public IP address of the requester.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the public IP address.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_public_ip_with_location() -> Dict[str, Any]:
+    """
+    Retrieves the public IP address and its approximate location.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the public IP address and location details.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_artwork_data(limit: Optional[int] = None, page: Optional[int] = None, fields: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Access artwork data from the Art Institute of Chicago's collection.
+
+    Args:
+        limit (Optional[int]): Number of artworks to retrieve.
+        page (Optional[int]): Page number to retrieve.
+        fields (Optional[str]): Specific fields to include in the response.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing artwork data.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_iss_location() -> Dict[str, Any]:
+    """
+    Get the current location of the International Space Station.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the ISS position.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_lyrics(artist: str, title: str) -> Dict[str, Any]:
+    """
+    Fetch song lyrics by artist and title.
+
+    Args:
+        artist (str): The artist's name.
+        title (str): The song title.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the song lyrics.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_random_fox_image() -> Dict[str, Any]:
+    """
+    Provides a random image of a fox.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the image URL and link.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_trivia_questions(amount: Optional[int] = 1, category: Optional[int] = None, difficulty: Optional[str] = None, question_type: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Offers random trivia questions.
+
+    Args:
+        amount (Optional[int]): Number of questions to retrieve.
+        category (Optional[int]): Category of trivia questions.
+        difficulty (Optional[str]): Difficulty level (e.g., 'easy').
+        question_type (Optional[str]): Type of question (e.g., 'multiple').
+
+    Returns:
+        Dict[str, Any]: A dictionary containing trivia questions.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_exchange_rates(base: Optional[str] = "USD") -> Dict[str, Any]:
+    """
+    Provides current and historical exchange rates.
+
+    Args:
+        base (Optional[str]): The base currency code (default: 'USD').
+
+    Returns:
+        Dict[str, Any]: A dictionary containing exchange rates.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+
+def get_google_search_results(q: str, location: Optional[str] = None, google_domain: Optional[str] = None, gl: Optional[str] = None, hl: Optional[str] = None, safe: Optional[str] = None, num: Optional[int] = None, start: Optional[int] = None) -> Dict[str, Any]:
+    """
+    Retrieve Google search results using SerpApi.
+
+    Args:
+        q (str): Search query.
+        location (Optional[str]): Location for the search.
+        google_domain (Optional[str]): Google domain to use.
+        gl (Optional[str]): Country code for the search.
+        hl (Optional[str]): Language for the search.
+        safe (Optional[str]): Safe search setting.
+        num (Optional[int]): Number of results to return.
+        start (Optional[int]): Starting index for results.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the search results.
+
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
