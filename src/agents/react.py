@@ -133,8 +133,7 @@ class Tool:
         try:
             if query:
                 return self.func(query)
-            else:
-                return self.func()
+            return self.func()
         except Exception as e:
             logger.error(f"Error executing tool {self.name}: {e}")
             return str(e)
