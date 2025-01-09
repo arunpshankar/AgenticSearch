@@ -37,7 +37,6 @@ Remember:
 - If a tool returns no results or fails, acknowledge this and consider using a different tool or approach.
 - Provide a final answer only when you're confident you have sufficient information.
 - If you cannot find the necessary information after using available tools, admit that you don't have enough information to answer the query confidently.
-- When both query and image context is provided, consider using GEMINI_MULTIMODAL 
 - when images are asked by the user, make sure to extract relevant URLs (IMPORTANT)
 - Use tool `CURRENT_LOCATION` to determine the current location when query has mentions like "near me", "nearby" etc.
 
@@ -358,4 +357,243 @@ def get_google_search_results(q: str, location: Optional[str] = None, google_dom
 
     Raises:
         requests.HTTPError: If the request fails.
+    """
+
+def get_google_image_search_results(q: str, tbm: str = "isch", gl: Optional[str] = None, hl: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve Google Images search results using SerpApi.
+
+    :param q: Search query (required).
+    :param tbm: Specifies image search (required, default is 'isch').
+    :param gl: Country code for the search (optional).
+    :param hl: Language for the search (optional).
+    :return: A dictionary containing the image search results.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_location_specific_search(q: str, location: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve Google search results simulating queries from a given geographic location.
+
+    :param q: Search query (required).
+    :param location: Geographic location (optional).
+    :param hl: Language for the search (optional).
+    :param gl: Country code for the search (optional).
+    :return: A dictionary containing location-specific search results.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_news_search(q: str, tbm: str = "nws", hl: Optional[str] = None, gl: Optional[str] = None, num: Optional[int] = None, start: Optional[int] = None) -> Dict[str, Any]:
+    """
+    Retrieve Google News search results using SerpApi.
+
+    :param q: Search query (required).
+    :param tbm: Specifies news search (required, default is 'nws').
+    :param hl: Language for the search (optional).
+    :param gl: Country code for the search (optional).
+    :param num: Number of results to return (optional).
+    :param start: Starting index for results (optional).
+    :param api_key: SerpApi API key (required).
+    :return: A dictionary containing the news search results.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_maps_search(q: Optional[str] = None, ll: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None, start: Optional[int] = None) -> Dict[str, Any]:
+    """
+    Retrieve Google Maps search results from SerpApi.
+
+    :param q: Search query (optional).
+    :param ll: Latitude and longitude coordinates (optional).
+    :param hl: Language for the search (optional).
+    :param gl: Country code for the search (optional).
+    :param start: Starting index for results (optional).
+    :param api_key: SerpApi API key (required).
+    :return: A dictionary containing Google Maps search results.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_maps_place(place_id: str, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve details of a specific place on Google Maps using place_id.
+
+    :param place_id: The place ID (required).
+    :param hl: Language for the search (optional).
+    :param gl: Country code for the search (optional).
+    :param api_key: SerpApi API key (required).
+    :return: A dictionary containing place details.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_jobs_search(q: str, location: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None, lrad: Optional[int] = None, ltype: Optional[str] = None, next_page_token: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve Google Jobs search results from SerpApi.
+
+    :param q: Search query (required).
+    :param location: Location for the job search (optional).
+    :param hl: Language for the search (optional).
+    :param gl: Country code for the search (optional).
+    :param lrad: Search radius in miles (optional).
+    :param ltype: Location type (e.g., 'city') (optional).
+    :param next_page_token: Token for the next page of results (optional).
+    :param api_key: SerpApi API key (required).
+    :return: A dictionary containing job search results.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_shopping_search(q: str, location: Optional[str] = None, google_domain: Optional[str] = None, gl: Optional[str] = None, hl: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve Google Shopping search results from SerpApi.
+
+    :param q: Search query (required).
+    :param location: Location for the search (optional).
+    :param google_domain: Google domain to use (optional).
+    :param gl: Country code for the search (optional).
+    :param hl: Language for the search (optional).
+    :return: A dictionary containing shopping search results.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_walmart_basic_search(query: str, page: Optional[int] = None) -> Dict[str, Any]:
+    """
+    Retrieve Walmart search results using a query from SerpApi.
+
+    :param query: Search query (required).
+    :param page: Page number for results (optional).
+    :return: A dictionary containing Walmart search results.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_trends_interest_over_time(q: str, date: Optional[str] = None, hl: Optional[str] = None, geo: Optional[str] = None, tz: Optional[int] = None, gprop: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve 'Interest over time' data for a given query using SerpApi's Google Trends API.
+
+    :param q: Search query (required).
+    :param date: Date range for the trends (optional).
+    :param hl: Language for the search (optional).
+    :param geo: Geographic region (optional).
+    :param tz: Timezone offset (optional).
+    :param gprop: Google property (optional).
+    :return: A dictionary containing interest over time data.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_trends_compared_breakdown(q: str, data_type: str = "GEO_MAP", geo: Optional[str] = None, region: Optional[str] = None, date: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve 'Compared breakdown by region' data for multiple queries using SerpApi's Google Trends API.
+
+    :param q: Comma-separated queries (required).
+    :param data_type: Data type (e.g., 'GEO_MAP', required).
+    :param geo: Geographic region (optional).
+    :param region: Specific region (optional).
+    :param date: Date range for the trends (optional).
+    :param api_key: SerpApi API key (required).
+    :return: A dictionary containing compared breakdown data by region.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_trends_interest_by_region(q: str, data_type: str = "GEO_MAP_0", geo: Optional[str] = None, region: Optional[str] = None, date: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve 'Interest by region' data for a single query using SerpApi's Google Trends API.
+
+    :param q: Search query (required).
+    :param data_type: Data type (required, default is 'GEO_MAP_0').
+    :param geo: Geographic region (optional).
+    :param region: Specific region (optional).
+    :param date: Date range for the trends (optional).
+    :return: A dictionary containing interest by region data.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_local_basic_search(q: str, location: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve local business results by query using SerpApi's Google Local API.
+
+    :param q: Search query (required).
+    :param location: Location for the search (optional).
+    :param hl: Language for the search (optional).
+    :param gl: Geographic region for the search (optional).
+    :return: A dictionary containing local business results.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_finance_basic_search(q: str, hl: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve Google Finance data for a given ticker or search query from SerpApi.
+
+    :param q: Search query or ticker (required).
+    :param hl: Language for the search (optional).
+    :return: A dictionary containing Google Finance data.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_finance_currency_exchange(q: str, hl: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve exchange rate data for a currency pair using SerpApi.
+
+    :param q: Currency pair (e.g., 'USD/EUR') (required).
+    :param hl: Language for the search (optional).
+    :return: A dictionary containing currency exchange rate data.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_events_basic_search(q: str, hl: Optional[str] = None, gl: Optional[str] = None, location: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve events based on a query using SerpApi's Google Events API.
+
+    :param q: Search query (e.g., 'Events in Austin, TX') (required).
+    :param hl: Language for the search (optional).
+    :param gl: Geographic region for the search (optional).
+    :param location: Location for the events (optional).
+    :return: A dictionary containing events data.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_play_query_search(q: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve app listings from the Google Play Store by search query using SerpApi.
+
+    :param q: Search query (optional).
+    :param hl: Language for the search (optional).
+    :param gl: Geographic region for the search (optional).
+    :return: A dictionary containing app listings.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_google_videos_basic_search(q: str, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve video search results from Google Videos by query using SerpApi.
+
+    :param q: Search query (required).
+    :param hl: Language for the search (optional).
+    :param gl: Geographic region for the search (optional).
+    :return: A dictionary containing video search results.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_youtube_basic_search(q: str, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Retrieve YouTube search results by providing a search query using SerpApi.
+
+    :param q: Search query (required).
+    :param hl: Language for the search (optional).
+    :param gl: Geographic region for the search (optional).
+    :return: A dictionary containing YouTube search results.
+    :raises requests.HTTPError: If the request fails.
+    """
+
+def get_multimodal_reasoning(q: Union[str, Dict[str, str]]) -> str:
+    """
+    Perform multimodal reasoning on text and image inputs using Gemini model.
+    
+    Args:
+        q (Union[str, Dict[str, str]]): Either:
+            - A dictionary containing text and image_path
+            - A JSON string containing text and image_path
+    
+    Returns:
+        str: Generated reasoning/response from Gemini model
+        
+    Raises:
+        ValueError: If inputs are invalid or image cannot be loaded
+        Exception: For other errors during processing
     """

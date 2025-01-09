@@ -357,15 +357,25 @@ class Agent:
             else:
                 response = generate_content(self.client, self.model, prompt)
                 response = str(response.text) if response else {"error": "No response from Gemini"}
-
+            
+            # Log raw response for debugging
             cleaned_response = response.strip().strip('`').strip()
+            logger.info(f"Raw response before JSON parsing: {cleaned_response}")
+            
+            # Handle potential prefixes
             if cleaned_response.startswith('json'):
                 cleaned_response = cleaned_response[4:].strip()
-
-            return json.loads(cleaned_response)
+            
+            # Validate and parse JSON
+            try:
+                return json.loads(cleaned_response)
+            except json.JSONDecodeError as jde:
+                logger.error(f"JSON decode error: {jde} | Response: {cleaned_response}")
+                return {"error": f"Invalid JSON response: {str(jde)}"}
         except Exception as e:
             logger.error(f"Error in ask_gemini: {e}")
             return {"error": str(e)}
+
 
     def think(self):
         """
