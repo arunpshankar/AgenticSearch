@@ -509,7 +509,7 @@ class Agent:
             if self.image_path and "action" in response:
                 action = response["action"]
                 if action["name"] != "GEMINI_MULTIMODAL":
-                    action["name"] = "GEMINI_MULTIMODAL"
+                    # action["name"] = "GEMINI_MULTIMODAL"
                     action["input"] = {
                         "text": action.get("input", self.query),
                         "image_path": self.image_path

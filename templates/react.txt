@@ -79,9 +79,6 @@ def get_cat_fact(max_length: Optional[int] = None) -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the cat fact.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_multiple_cat_facts(limit: int) -> Dict[str, Any]:
@@ -93,9 +90,6 @@ def get_multiple_cat_facts(limit: int) -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the cat facts.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_cat_breeds(limit: Optional[int] = None) -> Dict[str, Any]:
@@ -107,9 +101,6 @@ def get_cat_breeds(limit: Optional[int] = None) -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the list of cat breeds.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_random_dog_image() -> Dict[str, Any]:
@@ -118,9 +109,6 @@ def get_random_dog_image() -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the dog image URL.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_multiple_dog_images(number: int) -> Dict[str, Any]:
@@ -132,9 +120,6 @@ def get_multiple_dog_images(number: int) -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the dog image URLs.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_random_dog_breed_image(breed: str) -> Dict[str, Any]:
@@ -146,9 +131,6 @@ def get_random_dog_breed_image(breed: str) -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the dog image URL.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_random_joke() -> Dict[str, Any]:
@@ -157,9 +139,6 @@ def get_random_joke() -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the joke.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_ten_random_jokes() -> List[Dict[str, Any]]:
@@ -168,9 +147,6 @@ def get_ten_random_jokes() -> List[Dict[str, Any]]:
 
     Returns:
         List[Dict[str, Any]]: A list of dictionaries containing jokes.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_random_joke_by_type(joke_type: str) -> Dict[str, Any]:
@@ -182,9 +158,6 @@ def get_random_joke_by_type(joke_type: str) -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the joke.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_predicted_age_by_name(name: str, country_id: Optional[str] = None) -> Dict[str, Any]:
@@ -197,9 +170,6 @@ def get_predicted_age_by_name(name: str, country_id: Optional[str] = None) -> Di
 
     Returns:
         Dict[str, Any]: A dictionary containing the predicted age information.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_gender_by_name(name: str, country_id: Optional[str] = None, language_id: Optional[str] = None) -> Dict[str, Any]:
@@ -213,9 +183,6 @@ def get_gender_by_name(name: str, country_id: Optional[str] = None, language_id:
 
     Returns:
         Dict[str, Any]: A dictionary containing the predicted gender information.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_nationality_by_name(name: str, country_id: Optional[str] = None) -> Dict[str, Any]:
@@ -228,9 +195,6 @@ def get_nationality_by_name(name: str, country_id: Optional[str] = None) -> Dict
 
     Returns:
         Dict[str, Any]: A dictionary containing the predicted nationality information.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_zip_info(zip_code: str) -> Dict[str, Any]:
@@ -242,9 +206,6 @@ def get_zip_info(zip_code: str) -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing location data.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_public_ip() -> Dict[str, Any]:
@@ -253,9 +214,6 @@ def get_public_ip() -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the public IP address.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_public_ip_with_location() -> Dict[str, Any]:
@@ -264,9 +222,6 @@ def get_public_ip_with_location() -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the public IP address and location details.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_artwork_data(limit: Optional[int] = None, page: Optional[int] = None, fields: Optional[str] = None) -> Dict[str, Any]:
@@ -280,9 +235,6 @@ def get_artwork_data(limit: Optional[int] = None, page: Optional[int] = None, fi
 
     Returns:
         Dict[str, Any]: A dictionary containing artwork data.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_iss_location() -> Dict[str, Any]:
@@ -291,9 +243,6 @@ def get_iss_location() -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the ISS position.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_lyrics(artist: str, title: str) -> Dict[str, Any]:
@@ -306,9 +255,6 @@ def get_lyrics(artist: str, title: str) -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the song lyrics.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_random_fox_image() -> Dict[str, Any]:
@@ -317,9 +263,6 @@ def get_random_fox_image() -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing the image URL and link.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_trivia_questions(amount: Optional[int] = 1, category: Optional[int] = None, difficulty: Optional[str] = None, question_type: Optional[str] = None) -> Dict[str, Any]:
@@ -334,9 +277,6 @@ def get_trivia_questions(amount: Optional[int] = 1, category: Optional[int] = No
 
     Returns:
         Dict[str, Any]: A dictionary containing trivia questions.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_exchange_rates(base: Optional[str] = "USD") -> Dict[str, Any]:
@@ -348,9 +288,6 @@ def get_exchange_rates(base: Optional[str] = "USD") -> Dict[str, Any]:
 
     Returns:
         Dict[str, Any]: A dictionary containing exchange rates.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_google_search_results(q: str, location: Optional[str] = None, google_domain: Optional[str] = None, gl: Optional[str] = None, hl: Optional[str] = None, safe: Optional[str] = None, num: Optional[int] = None, start: Optional[int] = None) -> Dict[str, Any]:
@@ -369,9 +306,6 @@ def get_google_search_results(q: str, location: Optional[str] = None, google_dom
 
     Returns:
         Dict[str, Any]: A dictionary containing the search results.
-
-    Raises:
-        requests.HTTPError: If the request fails.
     """
 
 def get_google_image_search_results(q: str, tbm: str = "isch", gl: Optional[str] = None, hl: Optional[str] = None) -> Dict[str, Any]:
@@ -383,7 +317,6 @@ def get_google_image_search_results(q: str, tbm: str = "isch", gl: Optional[str]
     :param gl: Country code for the search (optional).
     :param hl: Language for the search (optional).
     :return: A dictionary containing the image search results.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_location_specific_search(q: str, location: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
@@ -395,7 +328,6 @@ def get_google_location_specific_search(q: str, location: Optional[str] = None, 
     :param hl: Language for the search (optional).
     :param gl: Country code for the search (optional).
     :return: A dictionary containing location-specific search results.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_news_search(q: str, tbm: str = "nws", hl: Optional[str] = None, gl: Optional[str] = None, num: Optional[int] = None, start: Optional[int] = None) -> Dict[str, Any]:
@@ -410,7 +342,6 @@ def get_google_news_search(q: str, tbm: str = "nws", hl: Optional[str] = None, g
     :param start: Starting index for results (optional).
     :param api_key: SerpApi API key (required).
     :return: A dictionary containing the news search results.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_maps_search(q: Optional[str] = None, ll: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None, start: Optional[int] = None) -> Dict[str, Any]:
@@ -424,7 +355,6 @@ def get_google_maps_search(q: Optional[str] = None, ll: Optional[str] = None, hl
     :param start: Starting index for results (optional).
     :param api_key: SerpApi API key (required).
     :return: A dictionary containing Google Maps search results.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_maps_place(place_id: str, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
@@ -436,7 +366,6 @@ def get_google_maps_place(place_id: str, hl: Optional[str] = None, gl: Optional[
     :param gl: Country code for the search (optional).
     :param api_key: SerpApi API key (required).
     :return: A dictionary containing place details.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_jobs_search(q: str, location: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None, lrad: Optional[int] = None, ltype: Optional[str] = None, next_page_token: Optional[str] = None) -> Dict[str, Any]:
@@ -452,7 +381,6 @@ def get_google_jobs_search(q: str, location: Optional[str] = None, hl: Optional[
     :param next_page_token: Token for the next page of results (optional).
     :param api_key: SerpApi API key (required).
     :return: A dictionary containing job search results.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_shopping_search(q: str, location: Optional[str] = None, google_domain: Optional[str] = None, gl: Optional[str] = None, hl: Optional[str] = None) -> Dict[str, Any]:
@@ -465,7 +393,6 @@ def get_google_shopping_search(q: str, location: Optional[str] = None, google_do
     :param gl: Country code for the search (optional).
     :param hl: Language for the search (optional).
     :return: A dictionary containing shopping search results.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_walmart_basic_search(query: str, page: Optional[int] = None) -> Dict[str, Any]:
@@ -475,7 +402,6 @@ def get_walmart_basic_search(query: str, page: Optional[int] = None) -> Dict[str
     :param query: Search query (required).
     :param page: Page number for results (optional).
     :return: A dictionary containing Walmart search results.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_trends_interest_over_time(q: str, date: Optional[str] = None, hl: Optional[str] = None, geo: Optional[str] = None, tz: Optional[int] = None, gprop: Optional[str] = None) -> Dict[str, Any]:
@@ -489,7 +415,6 @@ def get_google_trends_interest_over_time(q: str, date: Optional[str] = None, hl:
     :param tz: Timezone offset (optional).
     :param gprop: Google property (optional).
     :return: A dictionary containing interest over time data.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_trends_compared_breakdown(q: str, data_type: str = "GEO_MAP", geo: Optional[str] = None, region: Optional[str] = None, date: Optional[str] = None) -> Dict[str, Any]:
@@ -503,7 +428,6 @@ def get_google_trends_compared_breakdown(q: str, data_type: str = "GEO_MAP", geo
     :param date: Date range for the trends (optional).
     :param api_key: SerpApi API key (required).
     :return: A dictionary containing compared breakdown data by region.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_trends_interest_by_region(q: str, data_type: str = "GEO_MAP_0", geo: Optional[str] = None, region: Optional[str] = None, date: Optional[str] = None) -> Dict[str, Any]:
@@ -516,7 +440,6 @@ def get_google_trends_interest_by_region(q: str, data_type: str = "GEO_MAP_0", g
     :param region: Specific region (optional).
     :param date: Date range for the trends (optional).
     :return: A dictionary containing interest by region data.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_local_basic_search(q: str, location: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
@@ -528,7 +451,6 @@ def get_google_local_basic_search(q: str, location: Optional[str] = None, hl: Op
     :param hl: Language for the search (optional).
     :param gl: Geographic region for the search (optional).
     :return: A dictionary containing local business results.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_finance_basic_search(q: str, hl: Optional[str] = None) -> Dict[str, Any]:
@@ -538,7 +460,6 @@ def get_google_finance_basic_search(q: str, hl: Optional[str] = None) -> Dict[st
     :param q: Search query or ticker (required).
     :param hl: Language for the search (optional).
     :return: A dictionary containing Google Finance data.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_finance_currency_exchange(q: str, hl: Optional[str] = None) -> Dict[str, Any]:
@@ -548,7 +469,6 @@ def get_google_finance_currency_exchange(q: str, hl: Optional[str] = None) -> Di
     :param q: Currency pair (e.g., 'USD/EUR') (required).
     :param hl: Language for the search (optional).
     :return: A dictionary containing currency exchange rate data.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_events_basic_search(q: str, hl: Optional[str] = None, gl: Optional[str] = None, location: Optional[str] = None) -> Dict[str, Any]:
@@ -560,7 +480,6 @@ def get_google_events_basic_search(q: str, hl: Optional[str] = None, gl: Optiona
     :param gl: Geographic region for the search (optional).
     :param location: Location for the events (optional).
     :return: A dictionary containing events data.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_play_query_search(q: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
@@ -571,7 +490,6 @@ def get_google_play_query_search(q: Optional[str] = None, hl: Optional[str] = No
     :param hl: Language for the search (optional).
     :param gl: Geographic region for the search (optional).
     :return: A dictionary containing app listings.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_google_videos_basic_search(q: str, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
@@ -582,7 +500,6 @@ def get_google_videos_basic_search(q: str, hl: Optional[str] = None, gl: Optiona
     :param hl: Language for the search (optional).
     :param gl: Geographic region for the search (optional).
     :return: A dictionary containing video search results.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_youtube_basic_search(q: str, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
@@ -593,7 +510,6 @@ def get_youtube_basic_search(q: str, hl: Optional[str] = None, gl: Optional[str]
     :param hl: Language for the search (optional).
     :param gl: Geographic region for the search (optional).
     :return: A dictionary containing YouTube search results.
-    :raises requests.HTTPError: If the request fails.
     """
 
 def get_multimodal_reasoning(q: Union[str, Dict[str, str]]) -> str:
@@ -607,8 +523,4 @@ def get_multimodal_reasoning(q: Union[str, Dict[str, str]]) -> str:
     
     Returns:
         str: Generated reasoning/response from Gemini model
-        
-    Raises:
-        ValueError: If inputs are invalid or image cannot be loaded
-        Exception: For other errors during processing
     """
