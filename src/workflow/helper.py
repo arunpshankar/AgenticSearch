@@ -109,8 +109,8 @@ def extract_and_clean_text(text: str) -> tuple[list[str], str]:
 
         # Remove duplicates while maintaining order
         seen = set()
-        urls = [url for url in urls if not (url in seen or seen.add(url))]
-        return urls[:5], text
+        urls = [url for url in urls if not (url in seen or seen.add(url))][:5]
+        return urls, text
 
     except Exception as e:
         logger.error(f"Error in extract_and_clean_text: {e}")
@@ -258,13 +258,10 @@ def _render_final_answer_block(text: str, final_answer_container):
     # 2. Parse or extract images from the text
     all_urls, processed_text = _parse_or_extract_images(text)
 
-    # 3. Clean and format the text using the LLM (fix grammar, sentence structure, spelling ONLY)
-    cleaned_text = _clean_and_format_text(processed_text)
+    # 3. Display the final answer
+    _display_final_answer(answer_container, processed_text)
 
-    # 4. Display the final answer
-    _display_final_answer(answer_container, cleaned_text)
-
-    # 5. Display images in a uniform grid
+    # 4. Display images in a uniform grid
     _display_images(image_container, all_urls)
 
 
