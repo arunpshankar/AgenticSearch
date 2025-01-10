@@ -228,81 +228,6 @@ def get_random_joke_by_type(joke_type: str) -> Dict[str, Any]:
         raise
 
 
-def get_predicted_age_by_name(name: str, country_id: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Predict the age based on a given name.
-
-    :param name: The name to predict age for.
-    :param country_id: (Optional) The country code.
-    :return: A dictionary containing the predicted age information.
-    :raises requests.HTTPError: If the request fails.
-    """
-    base_url = "https://api.agify.io"
-    params = {"name": name}
-    if country_id:
-        params["country_id"] = country_id
-    try:
-        response = requests.get(base_url, params=params)
-        response.raise_for_status()
-        prediction = response.json()
-        logger.info(f"Predicted age for name '{name}': {prediction}")
-        return prediction
-    except requests.RequestException as e:
-        logger.error(f"Failed to predict age for name '{name}': {e}")
-        raise
-
-
-def get_gender_by_name(name: str, country_id: Optional[str] = None, language_id: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Predicts gender based on a given name.
-
-    :param name: The name to predict gender for.
-    :param country_id: (Optional) The country code.
-    :param language_id: (Optional) The language code.
-    :return: A dictionary containing the predicted gender information.
-    :raises requests.HTTPError: If the request fails.
-    """
-    base_url = "https://api.genderize.io"
-    params = {"name": name}
-    if country_id:
-        params["country_id"] = country_id
-    if language_id:
-        params["language_id"] = language_id
-    try:
-        response = requests.get(base_url, params=params)
-        response.raise_for_status()
-        gender_info = response.json()
-        logger.info(f"Predicted gender for name '{name}': {gender_info}")
-        return gender_info
-    except requests.RequestException as e:
-        logger.error(f"Failed to predict gender for name '{name}': {e}")
-        raise
-
-
-def get_nationality_by_name(name: str, country_id: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Predicts nationality based on a given name.
-
-    :param name: The name to predict nationality for.
-    :param country_id: (Optional) The country code.
-    :return: A dictionary containing the predicted nationality information.
-    :raises requests.HTTPError: If the request fails.
-    """
-    base_url = "https://api.nationalize.io"
-    params = {"name": name}
-    if country_id:
-        params["country_id"] = country_id
-    try:
-        response = requests.get(base_url, params=params)
-        response.raise_for_status()
-        nationality_info = response.json()
-        logger.info(f"Predicted nationality for name '{name}': {nationality_info}")
-        return nationality_info
-    except requests.RequestException as e:
-        logger.error(f"Failed to predict nationality for name '{name}': {e}")
-        raise
-
-
 def get_zip_info(zip_code: str) -> Dict[str, Any]:
     """
     Provides location data for U.S. ZIP codes.
@@ -1188,8 +1113,6 @@ if __name__ == "__main__":
     run_test("get_random_joke", get_random_joke)
     run_test("get_ten_random_jokes", get_ten_random_jokes)
     run_test("get_random_joke_by_type", get_random_joke_by_type, joke_type="programming")
-    run_test("get_predicted_age_by_name", get_predicted_age_by_name, name="michael")
-    run_test("get_predicted_age_by_name with country_id", get_predicted_age_by_name, name="michael", country_id="US")
     run_test("get_random_fox_image", get_random_fox_image)
     run_test("get_trivia_questions", get_trivia_questions, amount=1)
     run_test("get_exchange_rates", get_exchange_rates, base="USD")
@@ -1199,8 +1122,6 @@ if __name__ == "__main__":
     run_test("get_artwork_data", get_artwork_data, limit=2, fields="title,artist_title")
     run_test("get_iss_location", get_iss_location)
     run_test("get_lyrics", get_lyrics, artist="Adele", title="Hello")
-    run_test("get_gender_by_name", get_gender_by_name, name="Michael", country_id="US")
-    run_test("get_nationality_by_name", get_nationality_by_name, name="Michael")
     run_test("get_google_search_results", get_google_search_results, q="coffee", location="New York,NY,United States", hl="en", gl="us")
     run_test("get_google_image_search_results", get_google_image_search_results, q="cat memes", hl="en", gl="us")
     run_test("get_google_location_specific_search", get_google_location_specific_search, q="best pizza", location="Chicago,Illinois,United States", hl="en", gl="us")

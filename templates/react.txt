@@ -160,43 +160,6 @@ def get_random_joke_by_type(joke_type: str) -> Dict[str, Any]:
         Dict[str, Any]: A dictionary containing the joke.
     """
 
-def get_predicted_age_by_name(name: str, country_id: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Predict the age based on a given name.
-
-    Args:
-        name (str): The name to predict age for.
-        country_id (Optional[str]): The country code.
-
-    Returns:
-        Dict[str, Any]: A dictionary containing the predicted age information.
-    """
-
-def get_gender_by_name(name: str, country_id: Optional[str] = None, language_id: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Predicts gender based on a given name.
-
-    Args:
-        name (str): The name to predict gender for.
-        country_id (Optional[str]): The country code.
-        language_id (Optional[str]): The language code.
-
-    Returns:
-        Dict[str, Any]: A dictionary containing the predicted gender information.
-    """
-
-def get_nationality_by_name(name: str, country_id: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Predicts nationality based on a given name.
-
-    Args:
-        name (str): The name to predict nationality for.
-        country_id (Optional[str]): The country code.
-
-    Returns:
-        Dict[str, Any]: A dictionary containing the predicted nationality information.
-    """
-
 def get_zip_info(zip_code: str) -> Dict[str, Any]:
     """
     Provides location data for U.S. ZIP codes.

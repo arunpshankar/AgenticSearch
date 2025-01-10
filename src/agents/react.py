@@ -12,14 +12,12 @@ from src.tools.registry import get_google_play_query_search
 from src.tools.registry import get_public_ip_with_location
 from src.tools.registry import get_random_dog_breed_image
 from src.tools.registry import get_google_shopping_search
-from src.tools.registry import get_predicted_age_by_name
 from src.tools.registry import get_google_search_results
 from src.tools.registry import get_multimodal_reasoning
 from src.tools.registry import get_walmart_basic_search
 from src.tools.registry import get_youtube_basic_search
 from src.tools.registry import get_multiple_dog_images
 from src.tools.registry import get_random_joke_by_type
-from src.tools.registry import get_nationality_by_name
 from src.tools.registry import get_wiki_search_results
 from src.tools.registry import get_multiple_cat_facts
 from src.tools.registry import get_google_news_search
@@ -31,7 +29,6 @@ from src.tools.registry import get_random_dog_image
 from src.tools.registry import get_ten_random_jokes
 from src.tools.registry import get_random_fox_image
 from src.tools.registry import get_trivia_questions
-from src.tools.registry import get_gender_by_name
 from src.tools.registry import get_exchange_rates
 from src.llm.gemini_text import generate_content
 from src.tools.registry import get_artwork_data
@@ -73,9 +70,6 @@ class Name(Enum):
     RANDOM_JOKE = auto()
     TEN_RANDOM_JOKES = auto()
     RANDOM_JOKE_BY_TYPE = auto()
-    PREDICT_AGE = auto()
-    PREDICT_GENDER = auto()
-    PREDICT_NATIONALITY = auto()
     ZIP_INFO = auto()
     PUBLIC_IP = auto()
     CURRENT_LOCATION = auto()
@@ -559,9 +553,6 @@ def build_agent(max_iterations: int) -> Agent:
     agent.register_tool(Name.RANDOM_JOKE, get_random_joke)
     agent.register_tool(Name.TEN_RANDOM_JOKES, get_ten_random_jokes)
     agent.register_tool(Name.RANDOM_JOKE_BY_TYPE, get_random_joke_by_type)
-    agent.register_tool(Name.PREDICT_AGE, get_predicted_age_by_name)
-    agent.register_tool(Name.PREDICT_GENDER, get_gender_by_name)
-    agent.register_tool(Name.PREDICT_NATIONALITY, get_nationality_by_name)
     agent.register_tool(Name.ZIP_INFO, get_zip_info)
     agent.register_tool(Name.PUBLIC_IP, get_public_ip)
     agent.register_tool(Name.CURRENT_LOCATION, get_public_ip_with_location)
