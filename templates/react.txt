@@ -39,6 +39,21 @@ Remember:
 - If you cannot find the necessary information after using available tools, admit that you don't have enough information to answer the query confidently.
 - when images are asked by the user, make sure to extract relevant URLs (IMPORTANT)
 - Use tool `CURRENT_LOCATION` to determine the current location when query has mentions like "near me", "nearby" etc.
+- Do not include raw code, Python expressions, or function calls in any JSON string.  
+- Instead of Python code, produce a literal string or an array of strings if you need to list items.
+
+For handling images during reasoning:
+====================================
+Valid JSON:
+{{
+    "thought": "The `GOOGLE_IMAGE_SEARCH` tool successfully retrieved a list of image URLs related to the query.  I can now provide these URLs as the answer.",
+    "answer": "Here are some pretty images of Rashmika Mandanna:\\n\\n- https://example.com/image1.jpg\\n- https://example.com/image2.jpg\\n- https://example.com/image3.jpg"
+}}
+ Invalid JSON:
+ {{
+    "thought": "The `GOOGLE_IMAGE_SEARCH` tool successfully retrieved a list of image URLs related to the query.  I can now provide these URLs as the answer.",
+    "answer": "Here are some pretty images of Rashmika Mandanna:\\n\\n" + "\\n".join([f\"- {{result['original']}}\" for result in last_action_result['images_results']])
+ }}
 
 
 TOOL DEFINITIONS

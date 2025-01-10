@@ -91,14 +91,12 @@ def extract_image_urls_from_observation(observation: Dict) -> List[str]:
         logger.error(f"Error extracting image URLs from observation: {e}")
         logger.exception(e)  # Log the full traceback
 
-    return image_urls
+    return image_urls[:5] # retain only 1st 5 images 
 
 
 def extract_and_clean_text(text: str) -> tuple[list[str], str]:
     """
-    Extracts image URLs and cleans up the text by removing image references,
-    including URLs with "URL:", "url:", and hyperlinks. Removes floating or broken brackets,
-    HTTP/HTTPS URLs, patterns like [pattern] or (pattern), and adds breaklines for readability.
+    Extracts image URLs and cleans up the text for readability.
     """
     try:
         def extract_image_urls(text):
@@ -112,40 +110,7 @@ def extract_and_clean_text(text: str) -> tuple[list[str], str]:
         # Remove duplicates while maintaining order
         seen = set()
         urls = [url for url in urls if not (url in seen or seen.add(url))]
-        
-        # Clean the text
-        processed_text = text
-        
-        # Remove patterns like [pattern] or (pattern)
-        processed_text = re.sub(r'\[(.*?)\]', r'\1', processed_text)  # Remove square brackets
-        processed_text = re.sub(r'\((.*?)\)', r'\1', processed_text)  # Remove parentheses
-        
-        # Remove broken or floating brackets
-        processed_text = re.sub(r'\[', '', processed_text)  # Remove stray '['
-        processed_text = re.sub(r'\]', '', processed_text)  # Remove stray ']'
-        processed_text = re.sub(r'\(', '', processed_text)  # Remove stray '('
-        processed_text = re.sub(r'\)', '', processed_text)  # Remove stray ')'
-        
-        # Remove HTTP/HTTPS URLs from the text
-        processed_text = re.sub(r'https?://[^\s\]\)]+', '', processed_text)
-        
-        # Remove generic image references
-        processed_text = re.sub(r'\[Image[^\]]*?\]', '', processed_text)
-        
-        # Remove URLs with "URL:", "url:" prefixes
-        processed_text = re.sub(r'(URL|url):\s*\S+', '', processed_text)
-        
-        # Remove hyperlinks
-        processed_text = re.sub(r'<a\s+href=[\'"]?([^\'" >]+)[\'"]?>.+?</a>', '', processed_text)
-        
-        # Add breaklines for readability
-        processed_text = re.sub(r'(?<=[.!?]) ', '\n', processed_text)  # Add newline after end of sentences
-        processed_text = re.sub(r'(?<=:)', '\n', processed_text)       # Add newline after colon
-
-        # Clean up extra whitespace
-        processed_text = re.sub(r'\s+', ' ', processed_text).strip()
-
-        return urls, processed_text
+        return urls[:5], text
 
     except Exception as e:
         logger.error(f"Error in extract_and_clean_text: {e}")
@@ -373,7 +338,6 @@ Fix grammar, sentence structure, and spelling mistakes only.
 Return the text in neatly formatted markdown (DO NOT use italics). 
 Escape dollar signs properly. 
 Do not remove or add content. 
-If there are images, mention them as "... are shown below." 
 Strictly no placeholders for images like e.g., 'Image 2 displayed below' or [image] or [url], etc. 
 Avoid saying Image 1, Image 2 etc.
 DO NOT use italics in markdown.
@@ -381,6 +345,8 @@ Avoid hashtags.
 Avoid saying things like "Okay, here's the corrected text:"
 
 {processed_text}
+
+IMPORTANT - Remove all hyperlinks to images.
     """
 
     response = generate_content(gemini_client, MODEL_ID, prompt).text
@@ -402,32 +368,35 @@ def _display_final_answer(answer_container, cleaned_text: str):
 def _display_images(image_container, all_urls):
     """
     Displays a list of image URLs in a uniform grid layout.
+    If an image URL cannot be fetched, a placeholder image is displayed.
     """
     if all_urls:
         num_columns = 5
         cols = image_container.columns(num_columns)
-        
+
         image_width = 500
         image_height = 500
-        
+
         for idx, url in enumerate(all_urls):
             col_idx = idx % num_columns
             with cols[col_idx]:
                 st.markdown(
                     f"""
                     <div style="
-                        width: 100%; 
-                        display: flex; 
-                        justify-content: center; 
+                        width: 100%;
+                        display: flex;
+                        justify-content: center;
                         align-items: center;
                         overflow: hidden;
                         height: {image_height}px;
-                    "> 
-                        <img src="{url}" style="
-                            width: {image_width}px; 
-                            height: {image_height}px; 
-                            object-fit: cover; 
-                        "> 
+                    ">
+                        <img src="{url}"
+                             onerror="this.onerror=null;this.src='./img/placeholder-image.png';"
+                             style="
+                                width: {image_width}px;
+                                height: {image_height}px;
+                                object-fit: cover;
+                             " />
                     </div>
                     """,
                     unsafe_allow_html=True
