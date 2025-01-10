@@ -258,16 +258,13 @@ def _render_final_answer_block(text: str, final_answer_container):
     # 2. Parse or extract images from the text
     all_urls, processed_text = _parse_or_extract_images(text)
 
-    # 3. Process bold markdown formatting
-    processed_text = _apply_bold_formatting(processed_text)
-
-    # 4. Clean and format the text using the LLM (fix grammar, sentence structure, spelling ONLY)
+    # 3. Clean and format the text using the LLM (fix grammar, sentence structure, spelling ONLY)
     cleaned_text = _clean_and_format_text(processed_text)
 
-    # 5. Display the final answer
+    # 4. Display the final answer
     _display_final_answer(answer_container, cleaned_text)
 
-    # 6. Display images in a uniform grid
+    # 5. Display images in a uniform grid
     _display_images(image_container, all_urls)
 
 
@@ -309,19 +306,6 @@ def _parse_or_extract_images(text: str):
         all_urls, processed_text = extract_and_clean_text(str(text))
 
     return all_urls, processed_text
-
-
-def _apply_bold_formatting(processed_text: str) -> str:
-    """
-    Applies bold formatting for any markdown `*...*` and `**...**` patterns,
-    using <b> tags.
-    """
-    # 1. Apply bold formatting for double asterisks first
-    processed_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', processed_text)
-
-    # 2. Apply bold formatting for single asterisks afterward
-    processed_text = re.sub(r'\*(.*?)\*', r'<b>\1</b>', processed_text)
-    return processed_text
 
 
 def _clean_and_format_text(processed_text: str) -> str:
