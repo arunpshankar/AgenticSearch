@@ -31,7 +31,6 @@ from src.tools.registry import get_random_fox_image
 from src.tools.registry import get_trivia_questions
 from src.tools.registry import get_exchange_rates
 from src.llm.gemini_text import generate_content
-from src.tools.registry import get_artwork_data
 from src.tools.registry import get_iss_location
 from src.tools.registry import get_random_joke
 from src.tools.registry import get_cat_breeds
@@ -73,7 +72,6 @@ class Name(Enum):
     ZIP_INFO = auto()
     PUBLIC_IP = auto()
     CURRENT_LOCATION = auto()
-    ARTWORK_DATA = auto()
     ISS_LOCATION = auto()
     LYRICS = auto()
     RANDOM_FOX_IMAGE = auto()
@@ -110,27 +108,53 @@ class Tool:
         name (Name): The name of the tool, represented as an enum member.
         func (Callable): The function to execute the tool's operation.
     """
-    def __init__(self, name: Name, func: Callable[[Union[str, Dict[str, str]]], str]):
+    def __init__(self, name: Name, func: Callable):
         self.name = name
         self.func = func
 
-    def use(self, query: Union[str, Dict[str, str]]) -> Observation:
+    def use(self, query: Union[str, Dict[str, str], None] = None) -> Observation:
         """
         Executes the tool's function with the provided query.
 
         Args:
-            query (Union[str, Dict[str, str]]): The input query for the tool.
+            query (Union[str, Dict[str, str], None]): The input query for the tool.
+                Can be:
+                - A string
+                - A dictionary containing required keys
+                - None (if the tool does not require an input)
 
         Returns:
             Observation: The result of the tool execution or an error message.
         """
         try:
-            if query:
-                return self.func(query)
-            return self.func()
+            logger.info(f"Using tool: {self.name} with query: {query}")
+
+            # Validate and process input
+            if isinstance(query, dict):
+                # Ensure the required arguments are present in the dictionary
+                required_args = self.func.__code__.co_varnames[:self.func.__code__.co_argcount]
+                missing_args = [arg for arg in required_args if arg not in query]
+                if missing_args:
+                    raise ValueError(f"Missing required arguments for tool {self.name}: {missing_args}")
+
+                # Call the function with unpacked arguments
+                result = self.func(**query)
+            elif isinstance(query, str):
+                # Pass string input directly
+                result = self.func(query)
+            elif query is None:
+                # Call the function with no arguments if allowed
+                result = self.func()
+            else:
+                raise ValueError(f"Invalid input type for tool {self.name}: {type(query)}")
+
+            logger.info(f"Tool {self.name} executed successfully with result: {result}")
+            return result
         except Exception as e:
-            logger.error(f"Error executing tool {self.name}: {e}")
+            error_msg = f"Error executing tool {self.name}: {e}"
+            logger.error(error_msg)
             return str(e)
+
 
 class Message(BaseModel):
     """
@@ -556,7 +580,6 @@ def build_agent(max_iterations: int) -> Agent:
     agent.register_tool(Name.ZIP_INFO, get_zip_info)
     agent.register_tool(Name.PUBLIC_IP, get_public_ip)
     agent.register_tool(Name.CURRENT_LOCATION, get_public_ip_with_location)
-    agent.register_tool(Name.ARTWORK_DATA, get_artwork_data)
     agent.register_tool(Name.ISS_LOCATION, get_iss_location)
     agent.register_tool(Name.LYRICS, get_lyrics)
     agent.register_tool(Name.RANDOM_FOX_IMAGE, get_random_fox_image)

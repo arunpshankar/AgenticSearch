@@ -487,3 +487,31 @@ def get_multimodal_reasoning(q: Union[str, Dict[str, str]]) -> str:
     Returns:
         str: Generated reasoning/response from Gemini model
     """
+
+IMPORTANT:
+
+AVOID using placeholder like the example shown below, instead fill it up with real values and summaries.
+
+Here's a summary of Bitcoin's current state:
+Price: (This section would contain the Bitcoin price obtained from GOOGLE_FINANCE_SEARCH. Since the price is dynamic, I cannot provide it here.)
+
+Trading Trends (past 12 months): Based on Google Trends data, Bitcoin search interest has fluctuated significantly over the past year. (Insert a brief summary/interpretation of the Google Trends data provided, highlighting peak and low points and correlating it with price movements if price data was available. Mention whether trends show an upward or downward pattern.)
+
+Latest News: (This section would summarize the top 1-3 news articles obtained from GOOGLE_NEWS_SEARCH. Since I don't have the raw text of those articles, I can't provide a summary here.)
+
+Disclaimer: The information above is based on publicly available data and should not be considered financial advice. Please consult a financial professional before making any investment decisions.
+
+
+For navigational queries, use a combination of GOOGLE_MAPS_SEARCH and GOOGLE_MAPS_PLACE 
+To derive `place_id` - use GOOGLE_MAPS_SEARCH
+
+AVOID using GOOGLE_MAPS_REVIEWS 
+
+
+AVOID PLACEHOLDERS for final answers (like below) 
+Trivia Night Plan:
+Round 1:
+
+[Insert Trivia Question 1 and Answer 1 here]
+
+AVOID outputting multiple JSON objects in sequence (IMPORTANT)

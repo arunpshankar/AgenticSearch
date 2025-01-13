@@ -300,35 +300,6 @@ def get_public_ip_with_location() -> Dict[str, Any]:
         raise
 
 
-def get_artwork_data(limit: Optional[int] = None, page: Optional[int] = None, fields: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Access artwork data from the Art Institute of Chicago's collection.
-
-    :param limit: (Optional) Number of artworks to retrieve.
-    :param page: (Optional) Page number to retrieve.
-    :param fields: (Optional) Specific fields to include in the response.
-    :return: A dictionary containing artwork data.
-    :raises requests.HTTPError: If the request fails.
-    """
-    base_url = "https://api.artic.edu/api/v1/artworks"
-    params = {}
-    if limit:
-        params["limit"] = limit
-    if page:
-        params["page"] = page
-    if fields:
-        params["fields"] = fields
-    try:
-        response = requests.get(base_url, params=params)
-        response.raise_for_status()
-        artwork_data = response.json()
-        logger.info(f"Retrieved artwork data: {artwork_data}")
-        return artwork_data
-    except requests.RequestException as e:
-        logger.error(f"Failed to retrieve artwork data: {e}")
-        raise
-
-
 def get_iss_location() -> Dict[str, Any]:
     """
     Get the current location of the International Space Station.
@@ -1119,7 +1090,6 @@ if __name__ == "__main__":
     run_test("get_zip_info", get_zip_info, zip_code="90210")
     run_test("get_public_ip", get_public_ip)
     run_test("get_public_ip_with_location", get_public_ip_with_location)
-    run_test("get_artwork_data", get_artwork_data, limit=2, fields="title,artist_title")
     run_test("get_iss_location", get_iss_location)
     run_test("get_lyrics", get_lyrics, artist="Adele", title="Hello")
     run_test("get_google_search_results", get_google_search_results, q="coffee", location="New York,NY,United States", hl="en", gl="us")
