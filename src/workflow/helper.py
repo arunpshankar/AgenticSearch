@@ -1,5 +1,3 @@
-from src.config.setup import initialize_genai_client
-from src.llm.gemini_text import generate_content
 from src.config.setup import GOOGLE_ICON_PATH
 from src.utils.template import TemplateLoader
 from src.agents.react import run_react_agent
@@ -22,20 +20,16 @@ template_loader = TemplateLoader()
 
 def extract_image_urls_from_observation(observation: Dict) -> List[str]:
     """
-    Extracts image URLs from a SerpAPI image search observation result.
-    
-    This function handles various formats of the observation result and 
-    traverses its structure to find and extract image URLs. It supports 
-    different keys used for image results and URL fields within those results.
-
-    Args:
-        observation (Dict): The observation result from the image_search tool.
-                                 Can be a nested dictionary or a string 
-                                 representation of a dictionary.
-
-    Returns:
-        List[str]: A list of extracted image URLs.
+    Extracts image URLs from a SerpAPI image search observation result,
+    but only returns up to 5 URLs that end in .jpg or .png and are not
+    from a social network domain.
     """
+
+    def _is_social_network_url(url: str) -> bool:
+        # Simple check for social domains (expand as needed)
+        social_domains = ["facebook", "instagram", "twitter", "t.co", "fb.com"]
+        return any(domain in url.lower() for domain in social_domains)
+
     image_urls = []
     
     try:
@@ -83,7 +77,10 @@ def extract_image_urls_from_observation(observation: Dict) -> List[str]:
                 for field in ['original', 'link', 'image', 'thumbnail', 'original_image']:
                     if field in result and result[field]:
                         url = result[field]
-                        if isinstance(url, str) and url.startswith('http'):
+                        if (isinstance(url, str) 
+                            and url.startswith('http') 
+                            and not _is_social_network_url(url)
+                            and re.search(r'\.(jpg|png|jpeg)$', url, re.IGNORECASE)):
                             image_urls.append(url)
                             break
 
@@ -91,25 +88,41 @@ def extract_image_urls_from_observation(observation: Dict) -> List[str]:
         logger.error(f"Error extracting image URLs from observation: {e}")
         logger.exception(e)  # Log the full traceback
 
-    return image_urls[:5] # retain only 1st 5 images 
+    # Retain only the first 5 valid images
+    image_urls = image_urls[:5]  
+    return image_urls
 
 
 def extract_and_clean_text(text: str) -> tuple[list[str], str]:
     """
-    Extracts image URLs and cleans up the text for readability.
+    Extracts image URLs and cleans up the text for readability,
+    but only returns up to 5 URLs that contain .jpg or .png and
+    are not from a social network domain.
     """
-    try:
-        def extract_image_urls(text):
-            # Define a regex pattern to extract valid URLs
-            image_url_pattern = r'https?://[^\s\]\)]+'
-            return re.findall(image_url_pattern, text)
 
-        # Extract URLs using helper function
+    def extract_image_urls(text):
+        # Define a regex pattern to extract valid URLs
+        image_url_pattern = r'https?://[^\s\]\)]+'
+        all_urls = re.findall(image_url_pattern, text)
+
+        # Filter out social network URLs and keep only those containing .jpg or .png
+        social_domains = ["facebook", "instagram", "twitter", "t.co", "fb.com"]
+        
+        valid_urls = []
+        for url in all_urls:
+            if any(domain in url.lower() for domain in social_domains):
+                continue
+            if re.search(r'\.jpg|\.png|\.jpeg', url, re.IGNORECASE):
+                valid_urls.append(url)
+
+        # Return only the first 5
+        return valid_urls[:5]
+
+    try:
+        # Extract URLs
         urls = extract_image_urls(text)
 
-        # Remove duplicates while maintaining order
-        seen = set()
-        urls = [url for url in urls if not (url in seen or seen.add(url))][:5]
+        # Return the extracted URLs and the original text
         return urls, text
 
     except Exception as e:
@@ -285,6 +298,7 @@ def _parse_or_extract_images(text: str):
             # Direct dictionary input
             all_urls = extract_image_urls_from_observation(text)
             processed_text = str(text)
+            all_urls, processed_text = extract_and_clean_text(processed_text)
         elif isinstance(text, str):
             try:
                 # Try to parse as dictionary
@@ -292,6 +306,7 @@ def _parse_or_extract_images(text: str):
                 if isinstance(observation, dict):
                     all_urls = extract_image_urls_from_observation(observation)
                     processed_text = text
+                    all_urls, processed_text = extract_and_clean_text(text)
                 else:
                     all_urls, processed_text = extract_and_clean_text(text)
             except:
@@ -303,35 +318,6 @@ def _parse_or_extract_images(text: str):
         all_urls, processed_text = extract_and_clean_text(str(text))
 
     return all_urls, processed_text
-
-
-def _clean_and_format_text(processed_text: str) -> str:
-    """
-    Calls the LLM to fix grammar, sentence structure, and spelling mistakes,
-    returning the text as neat, easy-to-read markdown without italics.
-    """
-    gemini_client = initialize_genai_client()
-    MODEL_ID: str = "gemini-2.0-flash-exp"
-
-    # Updated prompt: only fix grammar, sentence structure, and spelling mistakes.
-    prompt: str = f"""
-Fix grammar, sentence structure, and spelling mistakes only. 
-Return the text in neatly formatted markdown (DO NOT use italics). 
-Escape dollar signs properly. 
-Do not remove or add content. 
-Strictly no placeholders for images like e.g., 'Image 2 displayed below' or [image] or [url], etc. 
-Avoid saying Image 1, Image 2 etc.
-DO NOT use italics in markdown.
-Avoid hashtags.
-Avoid saying things like "Okay, here's the corrected text:"
-
-{processed_text}
-
-IMPORTANT - Remove all hyperlinks to images.
-    """
-
-    response = generate_content(gemini_client, MODEL_ID, prompt).text
-    return response
 
 
 def _display_final_answer(answer_container, cleaned_text: str):
