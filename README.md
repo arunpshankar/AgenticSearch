@@ -11,13 +11,127 @@
 - **Dynamic Tool Registry**: Seamlessly integrates tools, including Wikipedia search and Google Trends, to expand functionality.  
 - **Multimodal Support**: Handles both text and image-based inputs to enrich query responses.  
 - **Streamlined Interface**: Built with a clean and interactive UI using Streamlit for intuitive user interactions.
-  
+
 ```mermaid
-  graph TD;
-      A-->B;
-      A-->C;
-      B-->D;
-      C-->D;
+flowchart LR
+    %% Define node styles
+    classDef userNode fill:#fff,stroke:#a8a8a8,stroke-width:2px
+    classDef taskNode fill:#ffecec,stroke:#ffd6d6,stroke-width:2px
+    classDef agentNode fill:#f0f5ff,stroke:#e1e8ff,stroke-width:2px
+    classDef toolNode fill:#ffffff,stroke:#e6e6e6,stroke-width:2px
+    classDef envNode fill:#f2fff2,stroke:#e1ffe1,stroke-width:2px
+    classDef defaultNode fill:#ffffff,stroke:#e6e6e6,stroke-width:2px
+
+    User((User)):::userNode
+
+    subgraph Input["Agentic Search UI"]
+        direction TB
+        Task[Task]
+        Outcome[Outcome]
+    end
+
+    subgraph Agent[" ReAct Agent "]
+        direction LR
+        subgraph Core[" "]
+            LLM["Gemini (LLM)"]
+        end
+        
+        subgraph Tools[" "]
+            API["Tools (APIs)"]
+        end
+        
+        subgraph Memory[" "]
+            Mem[Memory]
+        end
+    end
+
+    subgraph Actions[" Actions "]
+        direction TB
+        Act["fa:fa-gear Actions"]
+    end
+
+    subgraph Environments[" Environments "]
+        direction TB
+        
+        subgraph GoogleServices[" Google Services "]
+            direction LR
+            Search["Search"]
+            News["News"]
+            Maps["Maps"]
+            Images["Images"]
+            Shopping["Shopping"]
+            Finance["Finance"]
+            Trends["Trends"]
+            Events["Events"]
+            Play["Play Store"]
+        end
+
+        subgraph Knowledge[" Knowledge "]
+            direction LR
+            Wiki["Wikipedia"]
+            Trivia["Facts & Trivia"]
+            Lyrics["Lyrics"]
+        end
+
+        subgraph Demographics[" Demographics "]
+            direction LR
+            Age["Age Prediction"]
+            Gender["Gender"]
+            Nationality["Nationality"]
+        end
+
+        subgraph Location[" Location Services "]
+            direction LR
+            Zip["ZIP Info"]
+            IP["IP Info"]
+            ISS["ISS Location"]
+        end
+
+        subgraph Media[" Media & Images "]
+            direction LR
+            Dogs["Dog Images"]
+            Fox["Fox Images"]
+            MultiModal["Multimodal"]
+        end
+
+        subgraph Commerce[" Commerce "]
+            direction LR
+            Walmart["Walmart"]
+        end
+    end
+
+    %% Connections with enhanced arrows
+    User ====> Task
+    Task ====> LLM
+    LLM ====> |"Reasoning Loop"| API
+    API ====> LLM
+    LLM ====> Mem
+    Mem ====> LLM
+    API <====> Act
+    Act <====> |"observations"| Environments
+    LLM ====> Outcome
+    Outcome ====> User
+
+    %% Apply styles
+    class Task,Outcome taskNode
+    class LLM,API,Mem agentNode
+    class Search,News,Maps,Images,Shopping,Finance,Trends,Events,Play,Wiki,Trivia,Lyrics,Age,Gender,Nationality,Zip,IP,ISS,Dogs,Fox,MultiModal,Walmart envNode
+    class Act defaultNode
+
+    %% Container styles
+    style Input fill:transparent,stroke:#ffd6d6,stroke-width:2px
+    style Agent fill:transparent,stroke:#e1e8ff,stroke-width:2px
+    style Actions fill:transparent,stroke:#e6e6e6,stroke-width:2px
+    style Environments fill:transparent,stroke:#e1ffe1,stroke-width:2px
+    style Core fill:transparent,stroke:#e1e8ff,stroke-width:2px
+    style Tools fill:transparent,stroke:#e6e6e6,stroke-width:2px
+    style Memory fill:transparent,stroke:#e6e6e6,stroke-width:2px
+
+    %% Link styles - Updated with consistent pastel colors
+    linkStyle 0,1 stroke:#ff9999,stroke-width:3px
+    linkStyle 2,3,4,5 stroke:#99b3ff,stroke-width:3px
+    linkStyle 6,7 stroke:#b3d9b3,stroke-width:3px
+    linkStyle 8,9 stroke:#ff9999,stroke-width:3px
 ```
 
 # Prerequisites
