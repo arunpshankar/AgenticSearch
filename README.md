@@ -252,6 +252,12 @@ This comprehensive tool registry allows Agentic Search to address diverse and in
 
 ![stargaze](./img/stargaze.png)
 
+
+![image-search](./img/image-search.png)
+
+
+![multimodal](./img/multimodal.png)
+
 # Contribution
 
 We welcome contributions! Fork this repository and submit a pull request with detailed descriptions of your updates.
