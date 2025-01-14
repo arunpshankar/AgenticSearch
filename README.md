@@ -250,7 +250,7 @@ This comprehensive tool registry allows Agentic Search to address diverse and in
 
 # Examples 
 
-<script src="https://gist.github.com/arunpshankar/aee919ec8b755e29c7c4d0e36bad4af6.js"></script>
+![stargaze](./img/stargaze.png)
 
 # Contribution
 
