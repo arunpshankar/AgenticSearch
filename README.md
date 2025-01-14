@@ -11,6 +11,14 @@
 - **Dynamic Tool Registry**: Seamlessly integrates tools, including Wikipedia search and Google Trends, to expand functionality.  
 - **Multimodal Support**: Handles both text and image-based inputs to enrich query responses.  
 - **Streamlined Interface**: Built with a clean and interactive UI using Streamlit for intuitive user interactions.
+  
+```mermaid
+  graph TD;
+      A-->B;
+      A-->C;
+      B-->D;
+      C-->D;
+```
 
 # Prerequisites
 
@@ -109,9 +117,6 @@ Agentic Search integrates a variety of tools defined in `registry.py`, enabling 
   - `get_google_maps_place`: Retrieve details of a specific place.
   - `get_google_jobs_search`: Perform a Google Jobs search.
   - `get_google_shopping_search`: Fetch Google Shopping results.
-  - `get_google_trends_interest_over_time`: Retrieve Google Trends interest-over-time data.
-  - `get_google_trends_compared_breakdown`: Fetch compared breakdown data for multiple queries.
-  - `get_google_trends_interest_by_region`: Retrieve Google Trends interest-by-region data.
   - `get_google_local_basic_search`: Perform a local business search.
   - `get_google_play_query_search`: Search for apps in the Google Play Store.
   - `get_google_events_basic_search`: Retrieve event details from Google.
@@ -121,7 +126,6 @@ Agentic Search integrates a variety of tools defined in `registry.py`, enabling 
 
 - **Third-Party APIs**:
   - `get_walmart_basic_search`: Search for products on Walmart.
-  - `get_artwork_data`: Fetch artwork data from the Art Institute of Chicago.
   - `get_lyrics`: Retrieve song lyrics.
   - `get_google_trends_interest_over_time`: Fetch Google Trends interest-over-time data.
 
