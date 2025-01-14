@@ -55,7 +55,6 @@ Valid JSON:
     "answer": "Here are some pretty images of Rashmika Mandanna:\\n\\n" + "\\n".join([f\"- {{result['original']}}\" for result in last_action_result['images_results']])
  }}
 
-
 TOOL DEFINITIONS
 ================
 
@@ -365,44 +364,6 @@ def get_walmart_basic_search(query: str, page: Optional[int] = None) -> Dict[str
     :param query: Search query (required).
     :param page: Page number for results (optional).
     :return: A dictionary containing Walmart search results.
-    """
-
-def get_google_trends_interest_over_time(q: str, date: Optional[str] = None, hl: Optional[str] = None, geo: Optional[str] = None, tz: Optional[int] = None, gprop: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Retrieve 'Interest over time' data for a given query using SerpApi's Google Trends API.
-
-    :param q: Search query (required).
-    :param date: Date range for the trends (optional).
-    :param hl: Language for the search (optional).
-    :param geo: Geographic region (optional).
-    :param tz: Timezone offset (optional).
-    :param gprop: Google property (optional).
-    :return: A dictionary containing interest over time data.
-    """
-
-def get_google_trends_compared_breakdown(q: str, data_type: str = "GEO_MAP", geo: Optional[str] = None, region: Optional[str] = None, date: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Retrieve 'Compared breakdown by region' data for multiple queries using SerpApi's Google Trends API.
-
-    :param q: Comma-separated queries (required).
-    :param data_type: Data type (e.g., 'GEO_MAP', required).
-    :param geo: Geographic region (optional).
-    :param region: Specific region (optional).
-    :param date: Date range for the trends (optional).
-    :param api_key: SerpApi API key (required).
-    :return: A dictionary containing compared breakdown data by region.
-    """
-
-def get_google_trends_interest_by_region(q: str, data_type: str = "GEO_MAP_0", geo: Optional[str] = None, region: Optional[str] = None, date: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Retrieve 'Interest by region' data for a single query using SerpApi's Google Trends API.
-
-    :param q: Search query (required).
-    :param data_type: Data type (required, default is 'GEO_MAP_0').
-    :param geo: Geographic region (optional).
-    :param region: Specific region (optional).
-    :param date: Date range for the trends (optional).
-    :return: A dictionary containing interest by region data.
     """
 
 def get_google_local_basic_search(q: str, location: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:

@@ -1,6 +1,3 @@
-from src.tools.registry import get_google_trends_interest_over_time
-from src.tools.registry import get_google_trends_compared_breakdown
-from src.tools.registry import get_google_trends_interest_by_region
 from src.tools.registry import get_google_finance_currency_exchange
 from src.tools.registry import get_google_location_specific_search
 from src.tools.registry import get_google_image_search_results
@@ -591,9 +588,6 @@ def build_agent(max_iterations: int) -> Agent:
     agent.register_tool(Name.GOOGLE_MAPS_PLACE, get_google_maps_place)
     agent.register_tool(Name.GOOGLE_JOBS_SEARCH, get_google_jobs_search)
     agent.register_tool(Name.GOOGLE_SHOPPING_SEARCH, get_google_shopping_search)
-    agent.register_tool(Name.GOOGLE_TRENDS_INTEREST, get_google_trends_interest_over_time)
-    agent.register_tool(Name.GOOGLE_TRENDS_BREAKDOWN, get_google_trends_compared_breakdown)
-    agent.register_tool(Name.GOOGLE_TRENDS_REGION, get_google_trends_interest_by_region)
     agent.register_tool(Name.YOUTUBE_SEARCH, get_youtube_basic_search)
     agent.register_tool(Name.GOOGLE_PLAY_SEARCH, get_google_play_query_search)
     agent.register_tool(Name.GOOGLE_LOCAL_SEARCH, get_google_local_basic_search)

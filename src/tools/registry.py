@@ -705,105 +705,6 @@ def get_walmart_basic_search(query: str, page: Optional[int] = None) -> Dict[str
         raise
 
 
-def get_google_trends_interest_over_time(q: str, date: Optional[str] = None, hl: Optional[str] = None, geo: Optional[str] = None, tz: Optional[int] = None, gprop: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Retrieve 'Interest over time' data for a given query using SerpApi's Google Trends API.
-
-    :param q: Search query (required).
-    :param date: Date range for the trends (optional).
-    :param hl: Language for the search (optional).
-    :param geo: Geographic region (optional).
-    :param tz: Timezone offset (optional).
-    :param gprop: Google property (optional).
-    :return: A dictionary containing interest over time data.
-    :raises requests.HTTPError: If the request fails.
-    """
-    base_url = "https://serpapi.com/search"
-    params = {"engine": "google_trends", "q": q, "api_key": get_serp_api_key()}
-    if date:
-        params["date"] = date
-    if hl:
-        params["hl"] = hl
-    if geo:
-        params["geo"] = geo
-    if tz:
-        params["tz"] = tz
-    if gprop:
-        params["gprop"] = gprop
-    try:
-        response = requests.get(base_url, params=params)
-        response.raise_for_status()
-        trends_data = response.json()
-        logger.info(f"Retrieved Google Trends 'Interest over time' data for query '{q}': {trends_data}")
-        return trends_data
-    except requests.RequestException as e:
-        logger.error(f"Failed to retrieve Google Trends 'Interest over time' data for query '{q}': {e}")
-        raise
-
-
-def get_google_trends_compared_breakdown(q: str, data_type: str = "GEO_MAP", geo: Optional[str] = None, region: Optional[str] = None, date: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Retrieve 'Compared breakdown by region' data for multiple queries using SerpApi's Google Trends API.
-
-    :param q: Comma-separated queries (required).
-    :param data_type: Data type (e.g., 'GEO_MAP', required).
-    :param geo: Geographic region (optional).
-    :param region: Specific region (optional).
-    :param date: Date range for the trends (optional).
-    :param api_key: SerpApi API key (required).
-    :return: A dictionary containing compared breakdown data by region.
-    :raises requests.HTTPError: If the request fails.
-    """
-    base_url = "https://serpapi.com/search"
-    params = {"engine": "google_trends", "q": q, "data_type": data_type, "api_key": get_serp_api_key()}
-    if geo:
-        params["geo"] = geo
-    if region:
-        params["region"] = region
-    if date:
-        params["date"] = date
-    try:
-        response = requests.get(base_url, params=params)
-        response.raise_for_status()
-        breakdown_data = response.json()
-        logger.info(f"Retrieved Google Trends 'Compared breakdown by region' data for queries '{q}': {breakdown_data}")
-        return breakdown_data
-    except requests.RequestException as e:
-        logger.error(f"Failed to retrieve Google Trends 'Compared breakdown by region' data for queries '{q}': {e}")
-        raise
-
-
-def get_google_trends_interest_by_region(q: str, data_type: str = "GEO_MAP_0", geo: Optional[str] = None, region: Optional[str] = None, date: Optional[str] = None) -> Dict[str, Any]:
-    """
-    Retrieve 'Interest by region' data for a single query using SerpApi's Google Trends API.
-
-    :param q: Search query (required).
-    :param data_type: Data type (required, default is 'GEO_MAP_0').
-    :param geo: Geographic region (optional).
-    :param region: Specific region (optional).
-    :param date: Date range for the trends (optional).
-    :return: A dictionary containing interest by region data.
-    :raises requests.HTTPError: If the request fails.
-    """
-    base_url = "https://serpapi.com/search"
-    params = {"engine": "google_trends", "q": q, "data_type": data_type, "api_key": get_serp_api_key()}
-    if geo:
-        params["geo"] = geo
-    if region:
-        params["region"] = region
-    if date:
-        params["date"] = date
-    try:
-        response = requests.get(base_url, params=params)
-        response.raise_for_status()
-        region_data = response.json()
-        logger.info(f"Retrieved Google Trends 'Interest by region' data for query '{q}': {region_data}")
-        return region_data
-    except requests.RequestException as e:
-        logger.error(f"Failed to retrieve Google Trends 'Interest by region' data for query '{q}': {e}")
-        raise
-
-
 def get_google_local_basic_search(q: str, location: Optional[str] = None, hl: Optional[str] = None, gl: Optional[str] = None) -> Dict[str, Any]:
     """
     Retrieve local business results by query using SerpApi's Google Local API.
@@ -1101,9 +1002,6 @@ if __name__ == "__main__":
     run_test("get_google_jobs_search", get_google_jobs_search, q="software engineer", location="New York,NY", hl="en", gl="us")
     run_test("get_google_shopping_search", get_google_shopping_search, q="coffee mug", gl="us", hl="en")
     run_test("get_walmart_basic_search", get_walmart_basic_search, query="coffee maker", page=1)
-    run_test("get_google_trends_interest_over_time", get_google_trends_interest_over_time, q="coffee", date="today 12-m", geo="US")
-    run_test("get_google_trends_compared_breakdown", get_google_trends_compared_breakdown, q="coffee,tea", data_type="GEO_MAP", geo="US", date="today 3-m")
-    run_test("get_google_trends_interest_by_region", get_google_trends_interest_by_region, q="chocolate", data_type="GEO_MAP_0", geo="GB", region="CITY", date="today 5-y")
     run_test("get_google_local_basic_search", get_google_local_basic_search, q="coffee shops", location="New York,NY", hl="en", gl="us")
     run_test("get_google_finance_basic_search", get_google_finance_basic_search, q="NASDAQ:GOOGL", hl="en")
     run_test("get_google_finance_currency_exchange", get_google_finance_currency_exchange, q="USD/EUR", hl="en")
