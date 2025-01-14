@@ -248,6 +248,10 @@ Agentic Search integrates a variety of tools defined in `registry.py`, enabling 
 
 This comprehensive tool registry allows Agentic Search to address diverse and intricate queries effectively.
 
+# Examples 
+
+<script src="https://gist.github.com/arunpshankar/aee919ec8b755e29c7c4d0e36bad4af6.js"></script>
+
 # Contribution
 
 We welcome contributions! Fork this repository and submit a pull request with detailed descriptions of your updates.
