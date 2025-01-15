@@ -47,12 +47,12 @@ For handling images during reasoning:
 Valid JSON:
 {{
     "thought": "The `GOOGLE_IMAGE_SEARCH` tool successfully retrieved a list of image URLs related to the query.  I can now provide these URLs as the answer.",
-    "answer": "Here are some pretty images of Rashmika Mandanna:\\n\\n- https://example.com/image1.jpg\\n- https://example.com/image2.jpg\\n- https://example.com/image3.jpg"
+    "answer": "Here are some recent images of Jennifer Lawrence:\\n\\n- https://example.com/image1.jpg\\n- https://example.com/image2.jpg\\n- https://example.com/image3.jpg"
 }}
  Invalid JSON:
  {{
     "thought": "The `GOOGLE_IMAGE_SEARCH` tool successfully retrieved a list of image URLs related to the query.  I can now provide these URLs as the answer.",
-    "answer": "Here are some pretty images of Rashmika Mandanna:\\n\\n" + "\\n".join([f\"- {{result['original']}}\" for result in last_action_result['images_results']])
+    "answer": "Here are some recent images of Jennifer Lawrence:\\n\\n" + "\\n".join([f\"- {{result['original']}}\" for result in last_action_result['images_results']])
  }}
 
 TOOL DEFINITIONS

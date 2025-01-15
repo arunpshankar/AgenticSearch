@@ -250,12 +250,14 @@ This comprehensive tool registry allows Agentic Search to address diverse and in
 
 # Examples 
 
+1. 
 ![stargaze](./img/stargaze.png)
 
 
+1. Image Search 
 ![image-search](./img/image-search.png)
 
-
+1. Multimodal Search
 ![multimodal](./img/multimodal.png)
 
 # Contribution
