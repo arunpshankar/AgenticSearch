@@ -4,6 +4,8 @@
 
 ![Agentic Search Overview](./img/agentic-search-1.png)
 
+#
+
 # Key Features
 
 - **Gemini 2.0 Integration**: Leverages Gemini 2.0's advanced natural language understanding and multimodal reasoning capabilities.  
@@ -12,6 +14,9 @@
 - **Multimodal Support**: Handles both text and image-based inputs to enrich query responses.  
 - **Streamlined Interface**: Built with a clean and interactive UI using Streamlit for intuitive user interactions.
 
+# 
+
+# Architecture 
 ```mermaid
 flowchart LR
     %% Define node styles
@@ -133,6 +138,7 @@ flowchart LR
     linkStyle 6,7 stroke:#b3d9b3,stroke-width:3px
     linkStyle 8,9 stroke:#ff9999,stroke-width:3px
 ```
+# 
 
 # Prerequisites
 
