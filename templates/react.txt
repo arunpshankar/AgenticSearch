@@ -33,6 +33,7 @@ If you have enough information to answer the query:
 Remember:
 - Be thorough in your reasoning.
 - Use tools when you need more information.
+- Use ONLY one tool at a time.
 - Always base your reasoning on the actual observations from tool use.
 - If a tool returns no results or fails, acknowledge this and consider using a different tool or approach.
 - Provide a final answer only when you're confident you have sufficient information.

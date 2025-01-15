@@ -97,6 +97,7 @@ class Name(Enum):
     GEMINI_MULTIMODAL = auto()
     NONE = "none"
 
+
 class Tool:
     """
     Represents a tool with a name and functionality.
@@ -116,8 +117,8 @@ class Tool:
         Args:
             query (Union[str, Dict[str, str], None]): The input query for the tool.
                 Can be:
-                - A string
-                - A dictionary containing required keys
+                - A string (including an empty string)
+                - A dictionary (including an empty dictionary)
                 - None (if the tool does not require an input)
 
         Returns:
@@ -126,8 +127,11 @@ class Tool:
         try:
             logger.info(f"Using tool: {self.name} with query: {query}")
 
-            # Validate and process input
-            if isinstance(query, dict):
+            # Check for valid input types
+            if query is None or query == "" or (isinstance(query, dict) and not query):
+                # Handle cases where query is None, an empty string, or an empty dictionary
+                result = self.func()
+            elif isinstance(query, dict):
                 # Ensure the required arguments are present in the dictionary
                 required_args = self.func.__code__.co_varnames[:self.func.__code__.co_argcount]
                 missing_args = [arg for arg in required_args if arg not in query]
@@ -139,9 +143,6 @@ class Tool:
             elif isinstance(query, str):
                 # Pass string input directly
                 result = self.func(query)
-            elif query is None:
-                # Call the function with no arguments if allowed
-                result = self.func()
             else:
                 raise ValueError(f"Invalid input type for tool {self.name}: {type(query)}")
 

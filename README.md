@@ -143,7 +143,9 @@ flowchart LR
    SERP_API_KEY: xxxxxx
    ```
 
-# Installation
+# 
+
+# Setup
 
 Clone the repository and install the required dependencies:
 
@@ -160,8 +162,6 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-# Setup
-
 Set the necessary environment variables:
 
 ```bash
@@ -170,6 +170,8 @@ export PYTHONPATH=$PYTHONPATH:.
 ```
 
 Ensure your `credentials` folder contains the required API keys.
+
+# 
 
 # Usage
 
@@ -185,11 +187,7 @@ Ensure your `credentials` folder contains the required API keys.
 3. **View Results**:  
    Interact with the ReAct agent's reasoning trace and receive detailed, accurate answers.
 
-# Examples of Use
-
-- **Example 1**: Conduct a search to retrieve Wikipedia data.  
-- **Example 2**: Perform Google Trends analysis for multiple keywords.  
-- **Example 3**: Use multimodal reasoning to analyze text and image inputs.
+# 
 
 # Tools and APIs
 
@@ -248,21 +246,23 @@ Agentic Search integrates a variety of tools defined in `registry.py`, enabling 
 
 This comprehensive tool registry allows Agentic Search to address diverse and intricate queries effectively.
 
-# Examples 
-
-1. 
+# Hands-On Examples
+### 1. Finding Current Location and Identifying Locations of Interest
 ![stargaze](./img/stargaze.png)
 
-
-1. Image Search 
+### 2. Identifying Patterns and Cultural Significance of Mexican Talavera Tiles
 ![image-search](./img/image-search.png)
 
-1. Multimodal Search
+### 3. Accurate Breed Identification Through Multimodal Analysis
 ![multimodal](./img/multimodal.png)
+
+# 
 
 # Contribution
 
 We welcome contributions! Fork this repository and submit a pull request with detailed descriptions of your updates.
+
+# 
 
 # License
 
