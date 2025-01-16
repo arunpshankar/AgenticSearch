@@ -1,6 +1,6 @@
 # Agentic Search
 
-**Agentic Search** is an advanced AI-powered framework utilizing **Gemini 2.0** and a ReAct agent to perform complex searches and deliver detailed, cohesive answers. By synthesizing data from multiple APIs and leveraging a dynamic tool registry, it provides precise and scalable solutions for intricate queries.
+**Agentic Search** is an advanced AI-powered workflow built to design and implement intelligent search systems using **Gemini 2.0** and a ReAct agent. It orchestrates complex searches by dynamically integrating multiple APIs and leveraging a flexible tool registry. This workflow enables the synthesis of diverse data sources to deliver detailed, cohesive, and scalable solutions tailored to intricate queries.
 
 ![Agentic Search Overview](./img/agentic-search-1.png)
 
